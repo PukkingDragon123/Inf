@@ -374,15 +374,21 @@ const HAIRSTYLES = 3; // 0 flat, 1 spiky, 2 bob
 
 const custCache = {};
 function custImg(look, frame) {
-  const key = [look.skin, look.hair, look.style, look.shirt, look.granny ? 1 : 0, frame].join('|');
+  const key = [look.skin, look.hair, look.style, look.shirt, look.granny ? 1 : 0, look.vip ? 1 : 0, frame].join('|');
   if (custCache[key]) return custCache[key];
   const [cv, x] = mkCanvas(16, 24);
-  const skin = SKINS[look.skin], hair = look.granny ? '#e8e4da' : HAIRS[look.hair], shirt = SHIRTS[look.shirt];
+  const skin = SKINS[look.skin], hair = look.granny ? '#e8e4da' : HAIRS[look.hair];
+  const shirt = look.vip ? '#20222c' : SHIRTS[look.shirt];   // VIP wears a black tuxedo
   // head
   x.fillStyle = skin; x.fillRect(4, 2, 8, 7);
   // hair
   x.fillStyle = hair;
-  if (look.granny) {
+  if (look.vip) {
+    // slick hair, then a top hat over it
+    x.fillRect(4, 2, 8, 2);
+    x.fillStyle = '#15161c'; x.fillRect(3, -2, 10, 4); x.fillRect(2, 1, 12, 2); // hat brim + crown
+    x.fillStyle = '#4a4d5a'; x.fillRect(3, -2, 10, 1);
+  } else if (look.granny) {
     x.fillRect(3, 1, 10, 3); x.fillRect(6, 0, 4, 2); // bun
     x.fillRect(3, 3, 2, 3); x.fillRect(11, 3, 2, 3);
   } else if (look.style === 0) {
@@ -405,8 +411,14 @@ function custImg(look, frame) {
   x.fillStyle = shirt;
   if (look.granny) { x.fillRect(4, 9, 8, 5); x.fillRect(3, 14, 10, 5); }
   else x.fillRect(4, 9, 8, 9);
+  if (look.vip) {
+    // white dress shirt front + red bowtie + gold buttons
+    x.fillStyle = '#f4f0e6'; x.fillRect(7, 9, 2, 9);
+    x.fillStyle = '#c94f3d'; x.fillRect(6, 9, 4, 2);
+    x.fillStyle = '#ffd97a'; x.fillRect(7, 13, 1, 1); x.fillRect(7, 16, 1, 1);
+  }
   // arms
-  x.fillStyle = skin;
+  x.fillStyle = look.vip ? shirt : skin;
   x.fillRect(2, 10, 2, 5); x.fillRect(12, 10, 2, 5);
   // legs (2 frames)
   x.fillStyle = '#33261e';
@@ -594,11 +606,11 @@ function updateTrick(dt) {
     // pop the extra piece(s) at t=0.42
     if (prev < 0.42 && trick.magicT >= 0.42) {
       sfx.pop(); sfx.magic();
-      shake(2, 0.15);
+      shake(2.5, 0.18);
       for (let i = 0; i < trick.pendingPieces; i++) {
         trick.spawnQ.push(0.42 + i * 0.12);
       }
-      sparkleBurst(BX + 120, BY + 10, 10);
+      magicBurst(BX + 120, BY + 10);
     }
     if (trick.magicT >= 1.15) finishMagic();
   }
@@ -802,6 +814,7 @@ function updateMachines(dt) {
 const customers = [];
 let spawnTimer = 4;
 let firstCustomer = true;
+let serveStreak = 0;
 
 function customersUnlocked() { return S.tut >= 5 || S.stats.served > 0; }
 
@@ -845,17 +858,19 @@ function makeRequest(granny) {
 function spawnCustomer() {
   if (customers.length >= 3) return;
   const granny = S.rep > 3 && Math.random() < 0.1;
+  // VIP: rare, well-dressed, impatient but tips huge — only once the shop has a name
+  const vip = !granny && S.rep > 3.2 && S.stats.served > 8 && Math.random() < 0.09;
   const look = {
     skin: rndi(0, SKINS.length - 1),
     hair: rndi(0, HAIRS.length - 1),
     style: rndi(0, HAIRSTYLES - 1),
-    shirt: rndi(0, SHIRTS.length - 1),
-    granny
+    shirt: vip ? -1 : rndi(0, SHIRTS.length - 1),  // -1 => VIP tuxedo, drawn specially
+    granny, vip
   };
   const req = makeRequest(granny);
   if (firstCustomer) firstCustomer = false;
   const baseP = req.type === 'piece' ? 30 : req.type === 'bar' ? 42 : 55;
-  const patience = baseP * patienceMult() * (granny ? 1.5 : 1) * (S.stats.served === 0 ? 2 : 1);
+  const patience = baseP * patienceMult() * (granny ? 1.5 : 1) * (vip ? 0.7 : 1) * (S.stats.served === 0 ? 2 : 1);
   const slot = customers.length;
   customers.push({
     x: 650, slot,
@@ -896,19 +911,27 @@ function serveCustomer(c) {
   else if (r.type === 'bar') S.bars[r.flavor] -= r.qty;
   else S.boxes[r.flavor] -= r.qty;
 
+  // serve streak: consecutive happy serves stack a growing tip bonus
+  serveStreak++;
+  const streakBonus = 1 + Math.min(serveStreak - 1, 10) * 0.05;   // up to +50%
+  const speedFrac = c.patience / c.patienceMax;
   const base = requestValue(c);
-  const tip = base * (0.1 + 0.35 * (c.patience / c.patienceMax)) * (0.7 + S.rep * 0.14) * tipMult() * (c.look.granny ? 2 : 1);
-  const total = Math.max(1, Math.round(base + tip));
+  const tip = base * (0.1 + 0.35 * speedFrac) * (0.7 + S.rep * 0.14) * tipMult();
+  const roleMult = c.look.vip ? 3 : (c.look.granny ? 2 : 1);
+  const total = Math.max(1, Math.round((base + tip) * roleMult * streakBonus));
   S.money += total;
   S.stats.earned += total;
   S.stats.served++;
-  S.rep = clamp(S.rep + 0.03 + r.qty * 0.004, 0.5, 5);
+  S.rep = clamp(S.rep + 0.03 + r.qty * 0.004 + (c.look.vip ? 0.08 : 0), 0.5, 5);
 
   c.state = 'happy'; c.t = 0;
   sfx.coin();
+  if (c.look.vip) { sfx.powerup(); confettiBurst(); }
   bumpHud('hud-money');
-  addFloater(c.x, FEET_Y - 66, '+$' + fmt(total), '#ffd97a');
-  if (tip > base * 0.3) addFloater(c.x, FEET_Y - 80, 'TIP!', '#7ed67e', 0.8);
+  addFloater(c.x, FEET_Y - 66, '+$' + fmt(total), c.look.vip ? '#ffe6a0' : '#ffd97a');
+  if (c.look.vip) addFloater(c.x, FEET_Y - 82, 'VIP!', '#ffd97a', 0.9);
+  else if (tip > base * 0.3) addFloater(c.x, FEET_Y - 80, 'TIP!', '#7ed67e', 0.8);
+  if (serveStreak >= 3) addFloater(c.x + 18, FEET_Y - 94, 'COMBO x' + serveStreak, '#6fd8f0', 0.9);
   for (let i = 0; i < Math.min(8, 2 + Math.floor(total / 10)); i++) {
     particles.push({
       type: 'coin', x: c.x + rnd(-8, 8), y: FEET_Y - 40,
@@ -946,6 +969,7 @@ function updateCustomers(dt) {
         c.state = 'angry'; c.t = 0;
         S.rep = clamp(S.rep - 0.2, 0.5, 5);
         S.stats.lost++;
+        serveStreak = 0;   // a walked-out customer breaks the combo
         sfx.buzz();
         addFloater(c.x, FEET_Y - 66, 'HMPH!', '#e5604f');
       }
@@ -985,6 +1009,23 @@ function spawnCrumbs(x, y, n) {
       color: Math.random() < 0.5 ? c.base : c.dark, size: rndi(1, 2)
     });
   }
+}
+
+/* the money-shot: an expanding golden ring + spinning stars where the
+   impossible extra piece appears */
+function magicBurst(x, y) {
+  particles.push({ type: 'ring', x, y, t: 0, life: 0.45, r0: 4, r1: 46, color: '#ffd97a' });
+  particles.push({ type: 'ring', x, y, t: 0, life: 0.6, r0: 2, r1: 34, color: '#fff6d8' });
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2;
+    particles.push({
+      type: 'star', x, y,
+      vx: Math.cos(a) * rnd(40, 80), vy: Math.sin(a) * rnd(40, 80) - 20, g: 60,
+      t: 0, life: rnd(0.5, 0.85), spin: rnd(-8, 8), size: rndi(3, 4),
+      color: i % 2 ? '#ffd97a' : '#fff'
+    });
+  }
+  sparkleBurst(x, y, 12);
 }
 
 function sparkleBurst(x, y, n) {
@@ -1039,6 +1080,8 @@ function updateFx(dt) {
     if (p.type === 'coin') {
       const k = easeInOut(p.t / p.life);
       p.dx = lerp(p.x, p.tx, k); p.dy = lerp(p.y, p.ty, k) - Math.sin(k * Math.PI) * 26;
+    } else if (p.type === 'ring') {
+      // stationary expanding ring — no physics
     } else {
       p.vy += (p.g || 0) * dt;
       p.x += p.vx * dt; p.y += p.vy * dt;
@@ -1313,6 +1356,82 @@ window.addEventListener('blur', endPointer);
 /* ============================================================
    18. RENDERING
    ============================================================ */
+/* a little pixel price tag: "$" swoosh on a cream label */
+function priceTag(g, x, y) {
+  g.fillStyle = '#f7ead0'; g.fillRect(x, y, 9, 6);
+  g.fillStyle = '#c94f3d'; g.fillRect(x + 1, y + 1, 7, 1);
+  g.fillStyle = '#8a2e22'; g.fillRect(x + 3, y + 2, 3, 3);
+}
+
+/* LEFT WALL: a stocked convenience-store display cabinet (pure decor) */
+function drawStoreCabinet(g) {
+  const X = 14, Y = 52, Wd = 158, Ht = 108;
+  // cabinet carcass + back panel
+  g.fillStyle = '#3a2416'; g.fillRect(X - 3, Y - 3, Wd + 6, Ht + 8);
+  g.fillStyle = '#26527a'; g.fillRect(X, Y, Wd, Ht);           // painted back
+  g.fillStyle = '#2e6390'; for (let i = 0; i < Wd; i += 8) g.fillRect(X + i, Y, 1, Ht);
+  // top valance + sign
+  g.fillStyle = '#8a2e22'; g.fillRect(X - 4, Y - 12, Wd + 8, 12);
+  g.fillStyle = '#a53a2c'; g.fillRect(X - 4, Y - 12, Wd + 8, 3);
+  g.fillStyle = '#ffd97a'; g.font = '8px "PS2P", monospace'; g.textBaseline = 'top';
+  g.fillText('SWEETS', X + 44, Y - 11);
+  const shelfY = [Y + 30, Y + 66, Y + 102];
+  // three glass shelves
+  for (const sy of shelfY) {
+    g.fillStyle = 'rgba(180,220,240,0.18)'; g.fillRect(X, sy - 24, Wd, 24);
+    g.fillStyle = '#6b4a2c'; g.fillRect(X, sy, Wd, 4);
+    g.fillStyle = '#8a6440'; g.fillRect(X, sy, Wd, 1);
+  }
+  // --- shelf 1: candy jars ---
+  const jarCols = ['#d4708c', '#6fc493', '#e3b341', '#c98a3d', '#8a5a2b'];
+  for (let i = 0; i < 5; i++) {
+    const jx = X + 8 + i * 30, jy = shelfY[0] - 22;
+    g.fillStyle = 'rgba(230,245,252,0.9)'; g.fillRect(jx, jy, 20, 22);
+    g.fillStyle = jarCols[i]; g.fillRect(jx + 2, jy + 8, 16, 12);
+    // candy dots inside
+    g.fillStyle = 'rgba(255,255,255,0.5)';
+    g.fillRect(jx + 4, jy + 10, 2, 2); g.fillRect(jx + 9, jy + 13, 2, 2); g.fillRect(jx + 13, jy + 10, 2, 2);
+    g.fillStyle = '#8aa4b0'; g.fillRect(jx, jy, 20, 3);           // lid
+    g.fillStyle = '#eef6fa'; g.fillRect(jx + 2, jy + 4, 3, 14);   // glass glint
+    if (i % 2 === 0) priceTag(g, jx + 5, shelfY[0] - 9);
+  }
+  // --- shelf 2: chocolate bars standing + boxes ---
+  const barCols = ['#8a5a2b', '#4d2e17', '#e8d5ae', '#c98a3d'];
+  for (let i = 0; i < 6; i++) {
+    const bx = X + 8 + i * 15, by = shelfY[1] - 22;
+    const c = barCols[i % barCols.length];
+    g.fillStyle = '#c9a24a'; g.fillRect(bx, by, 12, 22);         // foil wrapper
+    g.fillStyle = c; g.fillRect(bx + 1, by + 5, 10, 13);         // label window
+    g.fillStyle = 'rgba(255,255,255,0.25)'; g.fillRect(bx + 1, by, 10, 2);
+  }
+  priceTag(g, X + 100, shelfY[1] - 9);
+  // gift boxes on the right of shelf 2
+  for (let i = 0; i < 2; i++) {
+    const gx = X + 120 + i * 20, gy = shelfY[1] - 18;
+    g.fillStyle = '#b5476f'; g.fillRect(gx, gy, 16, 16);
+    g.fillStyle = '#e8c0d2'; g.fillRect(gx, gy + 6, 16, 2); g.fillRect(gx + 6, gy, 2, 16);
+    g.fillStyle = '#ffd97a'; g.fillRect(gx + 5, gy - 2, 6, 3);
+  }
+  // --- shelf 3: bottles + a SALE sign ---
+  const botCols = ['#a5522c', '#6fa8dc', '#7ed67e', '#e3b341', '#d4708c'];
+  for (let i = 0; i < 5; i++) {
+    const px = X + 8 + i * 22, py = shelfY[2] - 22;
+    g.fillStyle = botCols[i]; g.fillRect(px + 3, py + 4, 8, 18);
+    g.fillStyle = '#3a2416'; g.fillRect(px + 5, py, 4, 5);        // neck
+    g.fillStyle = 'rgba(255,255,255,0.3)'; g.fillRect(px + 4, py + 6, 2, 12);
+    g.fillStyle = '#f7ead0'; g.fillRect(px + 4, py + 12, 6, 4);   // label
+  }
+  g.fillStyle = '#c94f3d'; g.fillRect(X + 120, shelfY[2] - 20, 30, 16);
+  g.fillStyle = '#ffd97a'; g.fillRect(X + 120, shelfY[2] - 20, 30, 2);
+  g.fillStyle = '#fff'; g.font = '8px "PS2P", monospace';
+  g.fillText('SALE', X + 122, shelfY[2] - 16);
+  // potted plant beside the cabinet (cosmetic)
+  g.fillStyle = '#7a4a24'; g.fillRect(X + 66, Y + Ht + 2, 22, 12);
+  g.fillStyle = '#8f5a2c'; g.fillRect(X + 66, Y + Ht + 2, 22, 2);
+  g.fillStyle = '#3f8a4d'; g.fillRect(X + 70, Y + Ht - 8, 14, 10);
+  g.fillStyle = '#4fa85e'; g.fillRect(X + 72, Y + Ht - 12, 4, 6); g.fillRect(X + 78, Y + Ht - 10, 4, 5);
+}
+
 /* static background, drawn once */
 const [bgCv, bg] = mkCanvas(W, H);
 function buildBG() {
@@ -1332,30 +1451,21 @@ function buildBG() {
   for (let y = 176, i = 0; y < H; y += 16, i++)
     for (let x = 8 + (i % 3) * 22; x < W; x += 90) bg.fillRect(x, y, 26, 1);
 
-  // hanging sign
-  bg.fillStyle = '#4a2c18'; bg.fillRect(70, 8, 2, 14); bg.fillRect(166, 8, 2, 14);
-  bg.fillStyle = '#3a2416'; bg.fillRect(56, 20, 126, 26);
-  bg.fillStyle = '#55371f'; bg.fillRect(58, 22, 122, 22);
+  // hanging shop sign, centered above the window
+  bg.fillStyle = '#4a2c18'; bg.fillRect(236, 2, 2, 8); bg.fillRect(348, 2, 2, 8);
+  bg.fillStyle = '#3a2416'; bg.fillRect(222, 8, 142, 18);
+  bg.fillStyle = '#55371f'; bg.fillRect(224, 10, 138, 14);
   bg.fillStyle = '#f0b64a';
   bg.font = '8px "PS2P", monospace'; bg.textBaseline = 'top';
-  bg.fillText('CHOCO & CO', 79, 30);
+  bg.fillText('CHOCO & CO', 244, 13);
 
   // window frame
-  bg.fillStyle = '#4a2c18'; bg.fillRect(248, 26, 92, 80);
-  bg.fillStyle = '#2a1a0e'; bg.fillRect(252, 30, 84, 72);
+  bg.fillStyle = '#4a2c18'; bg.fillRect(248, 30, 92, 78);
+  bg.fillStyle = '#2a1a0e'; bg.fillRect(252, 34, 84, 70);
   // (sky drawn dynamically)
 
-  // wall shelf with jars (decor)
-  bg.fillStyle = '#55371f'; bg.fillRect(24, 118, 150, 6);
-  bg.fillStyle = '#3a2416'; bg.fillRect(28, 124, 4, 6); bg.fillRect(166, 124, 4, 6);
-  const jarCols = ['#d4708c', '#6fc493', '#e3b341', '#e8d5ae'];
-  for (let i = 0; i < 4; i++) {
-    const jx = 34 + i * 34;
-    bg.fillStyle = '#c9dce4'; bg.fillRect(jx, 98, 18, 20);
-    bg.fillStyle = jarCols[i]; bg.fillRect(jx + 2, 106, 14, 10);
-    bg.fillStyle = '#8aa4b0'; bg.fillRect(jx, 98, 18, 3);
-    bg.fillStyle = '#eef6fa'; bg.fillRect(jx + 2, 102, 3, 12);
-  }
+  // ---- LEFT WALL: convenience-store display cabinet (cosmetic) ----
+  drawStoreCabinet(bg);
 
   // cutting table
   bg.fillStyle = '#8a5c33'; bg.fillRect(20, 196, 212, 140);
@@ -1512,22 +1622,22 @@ function drawBar(time) {
 
 function drawWindowSky(time) {
   ctx.save();
-  ctx.beginPath(); ctx.rect(252, 30, 84, 72); ctx.clip();
-  ctx.fillStyle = '#7ec0e8'; ctx.fillRect(252, 30, 84, 72);
-  ctx.fillStyle = '#9ed4f2'; ctx.fillRect(252, 30, 84, 18);
+  ctx.beginPath(); ctx.rect(252, 34, 84, 70); ctx.clip();
+  ctx.fillStyle = '#7ec0e8'; ctx.fillRect(252, 34, 84, 70);
+  ctx.fillStyle = '#9ed4f2'; ctx.fillRect(252, 34, 84, 18);
   // sun
-  ctx.fillStyle = '#ffe08a'; ctx.fillRect(312, 38, 12, 12);
-  ctx.fillStyle = '#fff2c0'; ctx.fillRect(314, 40, 8, 8);
+  ctx.fillStyle = '#ffe08a'; ctx.fillRect(312, 42, 12, 12);
+  ctx.fillStyle = '#fff2c0'; ctx.fillRect(314, 44, 8, 8);
   // clouds
   const cx1 = 252 + ((time * 4) % 130) - 30;
   const cx2 = 252 + ((time * 2.6 + 60) % 130) - 30;
   ctx.fillStyle = '#f4fbff';
-  ctx.fillRect(cx1, 48, 26, 8); ctx.fillRect(cx1 + 5, 44, 14, 6);
-  ctx.fillRect(cx2, 74, 20, 7); ctx.fillRect(cx2 + 4, 70, 11, 5);
+  ctx.fillRect(cx1, 52, 26, 8); ctx.fillRect(cx1 + 5, 48, 14, 6);
+  ctx.fillRect(cx2, 78, 20, 7); ctx.fillRect(cx2 + 4, 74, 11, 5);
   ctx.restore();
   // cross frame
   ctx.fillStyle = '#4a2c18';
-  ctx.fillRect(290, 30, 4, 72); ctx.fillRect(252, 62, 84, 4);
+  ctx.fillRect(290, 34, 4, 70); ctx.fillRect(252, 66, 84, 4);
 }
 
 function drawMelter(time) {
@@ -1546,6 +1656,12 @@ function drawMelter(time) {
   // chimney
   ctx.fillStyle = '#5a6470'; ctx.fillRect(MELTER.x + 22, MELTER.y, 20, 20);
   ctx.fillStyle = '#3a4048'; ctx.fillRect(MELTER.x + 20, MELTER.y, 24, 4);
+  // round pressure gauge with a wobbling needle
+  const gx = MELTER.x + 50, gy = MELTER.y + 26;
+  ctx.fillStyle = '#e8e0cc'; ctx.beginPath(); ctx.arc(gx, gy, 6, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = '#3a4048'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(gx, gy, 6, 0, Math.PI * 2); ctx.stroke();
+  const na = -2.2 + (active ? 1.6 + Math.sin(time * 8) * 0.3 : 0.3);
+  ctx.strokeStyle = '#c94f3d'; ctx.beginPath(); ctx.moveTo(gx, gy); ctx.lineTo(gx + Math.cos(na) * 4, gy + Math.sin(na) * 4); ctx.stroke();
   // window with liquid
   ctx.fillStyle = '#20242a'; ctx.fillRect(MELTER.x + 10, MELTER.y + 34, 44, 40);
   const fillH = active ? (m.t / m.dur) * 36 : (S.pieces >= MELT_PIECES ? 8 : 3);
@@ -1594,6 +1710,14 @@ function drawPacker(time) {
   // hopper
   ctx.fillStyle = '#6a5080'; ctx.fillRect(PACKER.x + 14, PACKER.y, 34, 16);
   ctx.fillStyle = '#584070'; ctx.fillRect(PACKER.x + 18, PACKER.y + 4, 26, 12);
+  // ribbon spool that spins while wrapping
+  const sx2 = PACKER.x + 8, sy2 = PACKER.y + 30;
+  ctx.fillStyle = '#c94f8a'; ctx.beginPath(); ctx.arc(sx2, sy2, 7, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#e87ab0'; ctx.beginPath(); ctx.arc(sx2, sy2, 3, 0, Math.PI * 2); ctx.fill();
+  const spin = active ? time * 9 : time * 1.2;
+  ctx.strokeStyle = '#fff'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(sx2, sy2); ctx.lineTo(sx2 + Math.cos(spin) * 6, sy2 + Math.sin(spin) * 6); ctx.stroke();
+  ctx.strokeStyle = '#f0b64a'; ctx.beginPath(); ctx.moveTo(sx2 + 7, sy2); ctx.lineTo(sx2 + 16, sy2 + 4); ctx.stroke(); // ribbon feed
   // stamp arm
   const stampY = active ? Math.abs(Math.sin(time * 8)) * 10 : 0;
   ctx.fillStyle = '#c8d0d8'; ctx.fillRect(PACKER.x + 24, PACKER.y + 26 + stampY, 14, 8);
@@ -1655,6 +1779,49 @@ function drawRegister() {
   }
 }
 
+/* the shopkeeper standing behind the counter — waves on a sale, bobs idle */
+let keeperBlink = 0;
+function drawShopkeeper(time) {
+  const sx = COUNTER.x + COUNTER.w - 34;       // right side of the counter
+  const bob = Math.sin(time * 2) * 1;
+  const hy = 184 + bob;                         // head top
+  const waving = registerAnim > 0 || customers.some(c => c.state === 'wait');
+  // slight blink cycle
+  keeperBlink = (Math.floor(time * 0.7) % 6 === 0) ? 1 : 0;
+  const torsoBottom = COUNTER.y;                // meet the counter top so he reads as "behind" it
+  const th = Math.max(18, torsoBottom - (hy + 12));
+  // back arm (resting)
+  ctx.fillStyle = '#e8b88c'; ctx.fillRect(sx - 12, hy + 16, 3, 12);
+  // torso / apron
+  ctx.fillStyle = '#3f7d6e'; ctx.fillRect(sx - 10, hy + 12, 20, th);   // shirt
+  ctx.fillStyle = '#f0ead6'; ctx.fillRect(sx - 7, hy + 16, 14, th - 4);// apron
+  ctx.fillStyle = '#cdbfa0'; ctx.fillRect(sx - 7, hy + 16, 14, 1);
+  ctx.fillStyle = '#c98a3d'; ctx.fillRect(sx - 2, hy + 22, 4, 4);      // apron pocket badge
+  // collar
+  ctx.fillStyle = '#356558'; ctx.fillRect(sx - 6, hy + 10, 12, 3);
+  // head
+  ctx.fillStyle = '#f0c8a0'; ctx.fillRect(sx - 6, hy, 12, 10);
+  ctx.fillStyle = '#e0b088'; ctx.fillRect(sx - 6, hy + 8, 12, 2);      // jaw shade
+  // hair + paper hat
+  ctx.fillStyle = '#5a3a20'; ctx.fillRect(sx - 6, hy, 12, 2); ctx.fillRect(sx - 6, hy + 1, 2, 3); ctx.fillRect(sx + 4, hy + 1, 2, 3);
+  ctx.fillStyle = '#f7f2e6'; ctx.fillRect(sx - 7, hy - 4, 14, 4);      // clerk cap
+  ctx.fillStyle = '#c94f3d'; ctx.fillRect(sx - 7, hy - 1, 14, 1);      // cap stripe
+  // face
+  ctx.fillStyle = '#3a241a';
+  if (keeperBlink) { ctx.fillRect(sx - 4, hy + 5, 3, 1); ctx.fillRect(sx + 1, hy + 5, 3, 1); }
+  else { ctx.fillRect(sx - 3, hy + 4, 2, 2); ctx.fillRect(sx + 1, hy + 4, 2, 2); }
+  ctx.fillStyle = '#c96a5a'; ctx.fillRect(sx - 3, hy + 7, 6, 1);       // smile
+  // waving front arm
+  ctx.fillStyle = '#f0c8a0';
+  if (waving) {
+    const w = Math.sin(time * 10) * 3;
+    ctx.fillRect(sx + 9, hy + 4 + w, 3, 10);
+    ctx.fillRect(sx + 9, hy + 2 + w, 4, 4);   // hand up
+  } else {
+    ctx.fillRect(sx + 9, hy + 16, 3, 12);
+  }
+}
+
 function drawDoor() {
   // swinging door panel
   const open = clamp(doorAnim, 0, 1);
@@ -1686,7 +1853,22 @@ function drawCustomer(c) {
   // shadow
   ctx.fillStyle = 'rgba(30,12,2,0.3)';
   ctx.fillRect(c.x - 12, FEET_Y - 2, 24, 4);
+  // VIP golden aura
+  if (c.look.vip) {
+    const a = 0.25 + Math.sin(nowT * 4) * 0.12;
+    ctx.fillStyle = `rgba(255,217,122,${a})`;
+    ctx.fillRect(c.x - 15 + shx, FEET_Y - 52 + bob + jy, 30, 52);
+  }
   ctx.drawImage(img, c.x - 16 + shx, FEET_Y - 48 + bob + jy, 32, 48);
+
+  // a happy customer walks off carrying a little shopping bag
+  if (c.state === 'happy') {
+    const bagx = c.x + 12 + shx, bagy = FEET_Y - 26 + jy;
+    ctx.fillStyle = '#c98a3d'; ctx.fillRect(bagx, bagy, 8, 9);
+    ctx.fillStyle = '#a9743d'; ctx.fillRect(bagx, bagy, 8, 2);
+    ctx.strokeStyle = '#7a5228'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(bagx + 1.5, bagy); ctx.lineTo(bagx + 3, bagy - 3); ctx.lineTo(bagx + 5, bagy - 3); ctx.lineTo(bagx + 6.5, bagy); ctx.stroke();
+  }
 
   // emotion marks
   if (c.state === 'happy') drawHeart(c.x - 4, FEET_Y - 64 + jy, '#e5604f');
@@ -1795,6 +1977,25 @@ function drawParticles() {
       ctx.fillRect(p.x - 1, p.y, 3, 1);
       ctx.fillRect(p.x, p.y - 1, 1, 3);
       ctx.globalAlpha = 1;
+    } else if (p.type === 'ring') {
+      const r = lerp(p.r0, p.r1, easeOut(k));
+      ctx.strokeStyle = p.color;
+      ctx.globalAlpha = (1 - k) * 0.9;
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, Math.PI * 2); ctx.stroke();
+      ctx.globalAlpha = 1;
+    } else if (p.type === 'star') {
+      ctx.save();
+      ctx.globalAlpha = 1 - k * k;
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.t * p.spin);
+      ctx.fillStyle = p.color;
+      const s = p.size;
+      ctx.fillRect(-s, -1, s * 2, 2);   // 4-point pixel star
+      ctx.fillRect(-1, -s, 2, s * 2);
+      ctx.fillStyle = '#fff'; ctx.fillRect(-1, -1, 2, 2);
+      ctx.restore();
+      ctx.globalAlpha = 1;
     } else {
       ctx.fillStyle = p.color;
       ctx.globalAlpha = 1 - k * k;
@@ -1861,6 +2062,7 @@ function draw(time) {
   drawMelter(time);
   drawPacker(time);
   drawShelfGoods();
+  drawShopkeeper(time);
   drawDoor();
   drawRegister();
   for (const c of customers) drawCustomer(c);

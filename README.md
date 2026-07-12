@@ -27,9 +27,14 @@ dependencies, works offline.
 - The actual infinite chocolate illusion, animated: slant cut → second cut →
   piece swap → the bar re-forms whole *and* drops a bonus square
 - Shop sim: pixel customers with randomized looks, patience meters, requests,
-  tips, reputation stars (grandma pays double)
+  tips, and reputation stars. Grandmas pay double; rare top-hat **VIPs** pay
+  triple with a golden aura and confetti; a **serve-streak combo** stacks a
+  growing tip bonus for keeping the line happy
+- A waving **shopkeeper** behind the counter and a stocked convenience-store
+  display shelf (jars, bars, gift boxes, bottles, a SALE tag)
 - Production chain: pieces → bars → gift boxes, 7 flavors with price multipliers
-- 14 upgrades, 14 milestones, confetti included
+- 14 upgrades, 14 milestones, confetti, and a flashy magic burst (ring
+  shockwave + spinning stars) every time the impossible piece appears
 - All pixel art drawn procedurally in code — zero image assets
 - Synthesized sound effects (WebAudio), mute toggle
 - Auto-save to localStorage + offline progress (your bots keep working up to 4h)
