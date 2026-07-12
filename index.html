@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infinite Choco Inc. — the impossible chocolate shop</title>
+<meta name="description" content="A pixel-art incremental game about the legendary infinite chocolate trick. Cut, rearrange, profit.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect x='1' y='2' width='14' height='12' rx='1' fill='%235c3317'/><rect x='2' y='3' width='5' height='4' fill='%238a5a2b'/><rect x='9' y='3' width='5' height='4' fill='%238a5a2b'/><rect x='2' y='9' width='5' height='4' fill='%238a5a2b'/><rect x='9' y='9' width='5' height='4' fill='%238a5a2b'/></svg>">
+</head>
+<body>
+<div id="wrap">
+
+  <header id="topbar">
+    <div id="logo"><span class="logo-choc">🍫</span> INFINITE CHOCO <span class="inc">INC.</span></div>
+    <div id="hud">
+      <div class="hud-item" id="hud-money" title="Money"><span class="hud-ico">$</span><span id="money-val">0</span></div>
+      <div class="hud-item" id="hud-pieces" title="Chocolate pieces in stock"><span class="hud-ico piece-ico"></span><span id="pieces-val">0</span></div>
+      <div class="hud-item" id="hud-rep" title="Shop reputation"><span id="rep-stars">★★★☆☆</span></div>
+    </div>
+    <div id="topbtns">
+      <button class="pxbtn small" id="btn-mute" title="Toggle sound">♪ ON</button>
+      <button class="pxbtn small danger" id="btn-reset" title="Wipe save (click twice)">RESET</button>
+    </div>
+  </header>
+
+  <div id="gamewrap">
+    <canvas id="game" width="640" height="360"></canvas>
+    <div id="toasts"></div>
+  </div>
+
+  <div id="panels">
+
+    <section class="card" id="card-melter">
+      <h2><span class="card-ico">🔥</span> CHOCO MELTER</h2>
+      <div class="flavor-chips" id="melter-flavors"></div>
+      <div class="machine-info" id="melter-info">4 pieces > 1 bar</div>
+      <div class="pbar"><div class="pbar-fill" id="melter-bar"></div><span class="pbar-txt" id="melter-txt">IDLE</span></div>
+      <button class="pxbtn wide" id="btn-melt">MELT</button>
+      <div class="auto-tag hidden" id="melter-auto">⚙ AUTO</div>
+    </section>
+
+    <section class="card" id="card-packer">
+      <h2><span class="card-ico">🎁</span> GIFT WRAPPER</h2>
+      <div class="flavor-chips" id="packer-flavors"></div>
+      <div class="machine-info" id="packer-info">2 bars > 1 gift box</div>
+      <div class="pbar"><div class="pbar-fill packer" id="packer-bar"></div><span class="pbar-txt" id="packer-txt">IDLE</span></div>
+      <button class="pxbtn wide" id="btn-pack">WRAP</button>
+      <div class="auto-tag hidden" id="packer-auto">⚙ AUTO</div>
+    </section>
+
+    <section class="card" id="card-stock">
+      <h2><span class="card-ico">📦</span> STOCK</h2>
+      <div id="stock-list"></div>
+    </section>
+
+    <section class="card grow" id="card-tabs">
+      <nav id="tabs">
+        <button class="tab-btn active" data-tab="upgrades">UPGRADES</button>
+        <button class="tab-btn" data-tab="flavors">FLAVORS</button>
+        <button class="tab-btn" data-tab="stats">STATS</button>
+      </nav>
+      <div class="tab-pane active" id="tab-upgrades"></div>
+      <div class="tab-pane" id="tab-flavors"></div>
+      <div class="tab-pane" id="tab-stats"></div>
+    </section>
+
+  </div>
+
+  <footer id="foot">The chocolate is infinite. Do not question the chocolate. <span id="save-ind"></span></footer>
+</div>
+
+<div id="overlay" class="hidden">
+  <div id="overlay-box">
+    <div id="overlay-title"></div>
+    <div id="overlay-body"></div>
+    <button class="pxbtn wide gold" id="overlay-btn">START</button>
+  </div>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>
