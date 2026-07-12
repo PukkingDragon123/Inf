@@ -107,36 +107,37 @@ const sfx = {
    ============================================================ */
 const FLAVORS = [
   { id: 'milk',    name: 'MILK',    mult: 1,   cost: 0,      c: { base: '#8a5a2b', light: '#a9743d', dark: '#5c3317', slab: '#452511' } },
-  { id: 'dark',    name: 'DARK',    mult: 1.8, cost: 60,     c: { base: '#4d2e17', light: '#6a4526', dark: '#2f1a0b', slab: '#221106' } },
-  { id: 'white',   name: 'WHITE',   mult: 3,   cost: 300,    c: { base: '#e8d5ae', light: '#f7ecd2', dark: '#c4a878', slab: '#a8894f' } },
-  { id: 'ruby',    name: 'RUBY',    mult: 5.5, cost: 1500,   c: { base: '#d4708c', light: '#e895ab', dark: '#a84e68', slab: '#7c3448' } },
-  { id: 'caramel', name: 'CARAMEL', mult: 10,  cost: 8000,   c: { base: '#c98a3d', light: '#e0a95e', dark: '#9c6524', slab: '#71470f' } },
-  { id: 'mint',    name: 'MINT',    mult: 18,  cost: 40000,  c: { base: '#6fc493', light: '#93dcb2', dark: '#4a9c6d', slab: '#2f6b47' } },
-  { id: 'gold',    name: 'GOLDEN',  mult: 40,  cost: 250000, c: { base: '#e3b341', light: '#f7d976', dark: '#b8862a', slab: '#8a6316' } }
+  { id: 'dark',    name: 'DARK',    mult: 1.8, cost: 40,     c: { base: '#4d2e17', light: '#6a4526', dark: '#2f1a0b', slab: '#221106' } },
+  { id: 'white',   name: 'WHITE',   mult: 3,   cost: 220,    c: { base: '#e8d5ae', light: '#f7ecd2', dark: '#c4a878', slab: '#a8894f' } },
+  { id: 'ruby',    name: 'RUBY',    mult: 5.5, cost: 1100,   c: { base: '#d4708c', light: '#e895ab', dark: '#a84e68', slab: '#7c3448' } },
+  { id: 'caramel', name: 'CARAMEL', mult: 10,  cost: 5500,   c: { base: '#c98a3d', light: '#e0a95e', dark: '#9c6524', slab: '#71470f' } },
+  { id: 'mint',    name: 'MINT',    mult: 18,  cost: 26000,  c: { base: '#6fc493', light: '#93dcb2', dark: '#4a9c6d', slab: '#2f6b47' } },
+  { id: 'gold',    name: 'GOLDEN',  mult: 40,  cost: 150000, c: { base: '#e3b341', light: '#f7d976', dark: '#b8862a', slab: '#8a6316' } }
 ];
 const FLAV = {};
 FLAVORS.forEach(f => FLAV[f.id] = f);
 
-const PRICE = { piece: 2, bar: 15, box: 42 };
+const PRICE = { piece: 3, bar: 20, box: 58 };
 const MELT_PIECES = 4, PACK_BARS = 2;
 const MELT_TIME = 8, PACK_TIME = 7;
 const BOT_TIME = 6;
 
 const UPS = [
-  { id: 'knife',     name: 'SHARPER KNIFE',  base: 15,   mult: 1.7,  max: 12, d: l => `Cutting is 25% faster per level. Now: ${Math.round(cutSpeedMult() * 100)}%` },
-  { id: 'hands',     name: 'MAGIC HANDS',    base: 120,  mult: 5,    max: 2,  d: l => l === 0 ? 'Lv1: the trick rearranges itself. Lv2: extra pieces auto-collect.' : (l === 1 ? 'Lv2: extra pieces fly to stock on their own.' : 'Fully automatic sleight of hand.') },
-  { id: 'gold',      name: 'GOLDEN KNIFE',   base: 200,  mult: 2.1,  max: 10, d: l => `+12% chance of a BONUS piece per trick. Now: +${l * 12}%` },
-  { id: 'bot',       name: 'CHOCO-BOT',      base: 80,   mult: 1.65, max: 30, d: l => `A robot that does the trick for you. Each bot: 1 trick / ${botInterval().toFixed(1)}s. Owned: ${l}` },
-  { id: 'botspd',    name: 'BOT OVERCLOCK',  base: 500,  mult: 2.2,  max: 10, d: l => `Bots work 15% faster per level.` },
-  { id: 'meltspd',   name: 'HOTTER FURNACE', base: 90,   mult: 1.8,  max: 10, d: l => `Melting is 12% faster per level. Now: ${meltDur().toFixed(1)}s` },
-  { id: 'meltbatch', name: 'BIGGER VAT',     base: 250,  mult: 2.4,  max: 8,  d: l => `Melt +1 batch at once. Now: up to ${(l + 1) * MELT_PIECES} pieces > ${l + 1} bars` },
-  { id: 'automelt',  name: 'AUTO-MELTER',    base: 600,  mult: 1,    max: 1,  d: l => l ? 'The melter feeds itself. Cozy.' : 'The melter starts by itself when pieces are ready.' },
-  { id: 'packspd',   name: 'SWIFT WRAPPER',  base: 100,  mult: 1.8,  max: 10, d: l => `Wrapping is 12% faster per level. Now: ${packDur().toFixed(1)}s` },
-  { id: 'packbatch', name: 'WIDE WRAPPER',   base: 350,  mult: 2.4,  max: 6,  d: l => `Wrap +1 gift box at once. Now: up to ${l + 1} boxes per run` },
-  { id: 'autopack',  name: 'AUTO-PACKAGER',  base: 900,  mult: 1,    max: 1,  d: l => l ? 'Boxes wrap themselves. Spooky.' : 'The wrapper starts by itself when bars are ready.' },
-  { id: 'market',    name: 'MARKETING',      base: 70,   mult: 1.7,  max: 15, d: l => `Customers arrive 12% more often per level.` },
-  { id: 'comfy',     name: 'COZY SHOP',      base: 120,  mult: 1.9,  max: 8,  d: l => `Customers wait 20% longer per level.` },
-  { id: 'charm',     name: 'CHARMING SMILE', base: 150,  mult: 1.95, max: 10, d: l => `Tips are 12% bigger per level.` }
+  { id: 'knife',     name: 'SHARPER KNIFE',  base: 10,   mult: 1.55, max: 12, d: l => `Cutting is 25% faster per level. Now: ${Math.round(cutSpeedMult() * 100)}%` },
+  { id: 'hands',     name: 'MAGIC HANDS',    base: 90,   mult: 5,    max: 2,  d: l => l === 0 ? 'Lv1: the trick rearranges itself. Lv2: extra pieces auto-collect.' : (l === 1 ? 'Lv2: extra pieces fly to stock on their own.' : 'Fully automatic sleight of hand.') },
+  { id: 'gold',      name: 'GOLDEN KNIFE',   base: 160,  mult: 1.9,  max: 10, d: l => `+12% chance of a BONUS piece per trick. Now: +${l * 12}%` },
+  { id: 'bot',       name: 'CHOCO-BOT',      base: 45,   mult: 1.5,  max: 30, d: l => `A robot that does the trick for you. Each bot: 1 trick / ${botInterval().toFixed(1)}s. Owned: ${l}` },
+  { id: 'botspd',    name: 'BOT OVERCLOCK',  base: 400,  mult: 2.05, max: 10, d: l => `Bots work 15% faster per level.` },
+  { id: 'meltspd',   name: 'HOTTER FURNACE', base: 60,   mult: 1.7,  max: 10, d: l => `Melting is 12% faster per level. Now: ${meltDur().toFixed(1)}s` },
+  { id: 'meltbatch', name: 'BIGGER VAT',     base: 200,  mult: 2.2,  max: 8,  d: l => `Melt +1 batch at once. Now: up to ${(l + 1) * MELT_PIECES} pieces > ${l + 1} bars` },
+  { id: 'automelt',  name: 'MELTER HELPER',  base: 450,  mult: 1,    max: 1,  d: l => l ? 'Pippa the mouse runs the melter for you.' : 'Hire a helper who starts the melter automatically.' },
+  { id: 'packspd',   name: 'SWIFT WRAPPER',  base: 75,   mult: 1.7,  max: 10, d: l => `Wrapping is 12% faster per level. Now: ${packDur().toFixed(1)}s` },
+  { id: 'packbatch', name: 'WIDE WRAPPER',   base: 280,  mult: 2.2,  max: 6,  d: l => `Wrap +1 gift box at once. Now: up to ${l + 1} boxes per run` },
+  { id: 'autopack',  name: 'WRAPPER HELPER', base: 700,  mult: 1,    max: 1,  d: l => l ? 'Benny the rabbit wraps boxes for you.' : 'Hire a helper who wraps gift boxes automatically.' },
+  { id: 'cashier',   name: 'CASHIER',        base: 1400, mult: 1,    max: 1,  d: l => l ? 'Nadia the fox rings up orders she can fill.' : 'Hire a cashier who auto-serves customers when stock is ready.' },
+  { id: 'market',    name: 'MARKETING',      base: 50,   mult: 1.6,  max: 15, d: l => `Customers arrive 12% more often per level.` },
+  { id: 'comfy',     name: 'COZY SHOP',      base: 90,   mult: 1.8,  max: 8,  d: l => `Customers wait 20% longer per level.` },
+  { id: 'charm',     name: 'CHARMING SMILE', base: 110,  mult: 1.85, max: 10, d: l => `Tips are 12% bigger per level.` }
 ];
 
 const MILESTONES = [
@@ -366,73 +367,203 @@ const coinImg = (() => {
   return cv;
 })();
 
-/* customer sprites: generated per look, 16x24, 2 walk frames */
-const SKINS = ['#f0c8a0', '#e0a878', '#b07850', '#7a5231'];
-const HAIRS = ['#2e1c10', '#6b4226', '#d8b04a', '#a83232', '#4a4a52', '#207068'];
-const SHIRTS = ['#4a78b0', '#b04a4a', '#4aa06a', '#b08a3a', '#7a4ab0', '#b0648c'];
-const HAIRSTYLES = 3; // 0 flat, 1 spiky, 2 bob
+/* ============================================================
+   custom pixel-art ICONS for the upgrade panel (24x24 each)
+   ============================================================ */
+const ICON_DRAW = {
+  knife(x) {
+    x.fillStyle = '#c8d0d8'; x.fillRect(3, 14, 12, 4); x.fillRect(4, 12, 10, 2);
+    x.fillStyle = '#eef2f6'; x.fillRect(4, 16, 10, 1);
+    x.fillStyle = '#6b4226'; x.fillRect(13, 15, 8, 5); x.fillStyle = '#8a5a35'; x.fillRect(13, 15, 8, 2);
+    x.fillStyle = '#fff'; x.fillRect(15, 4, 2, 2); x.fillRect(14, 6, 1, 1); // sparkle
+  },
+  gold(x) {
+    x.fillStyle = '#e3b341'; x.fillRect(3, 14, 12, 4); x.fillRect(4, 12, 10, 2);
+    x.fillStyle = '#ffd97a'; x.fillRect(4, 16, 10, 1);
+    x.fillStyle = '#6b4226'; x.fillRect(13, 15, 8, 5);
+    x.fillStyle = '#ffd97a'; x.fillRect(6, 4, 2, 2); x.fillRect(16, 6, 2, 2); x.fillStyle = '#fff'; x.fillRect(6, 4, 1, 1);
+  },
+  hands(x) {
+    x.fillStyle = '#f4efe8'; x.fillRect(7, 10, 10, 9); x.fillRect(6, 8, 3, 6); x.fillRect(9, 6, 2, 5); x.fillRect(12, 6, 2, 5); x.fillRect(15, 8, 2, 5);
+    x.fillStyle = '#d8cbb4'; x.fillRect(7, 17, 10, 2);
+    x.fillStyle = '#ffd97a'; x.fillRect(3, 4, 2, 2); x.fillRect(18, 5, 2, 2); x.fillStyle = '#fff'; x.fillRect(4, 10, 1, 1);
+  },
+  bot(x) {
+    x.fillStyle = '#788492'; x.fillRect(10, 2, 2, 3);
+    x.fillStyle = '#f05050'; x.fillRect(10, 1, 2, 1);
+    x.fillStyle = '#9aa6b2'; x.fillRect(5, 5, 12, 10);
+    x.fillStyle = '#3ce0f0'; x.fillRect(8, 8, 6, 3);
+    x.fillStyle = '#788492'; x.fillRect(6, 15, 10, 5);
+    x.fillStyle = '#f0b64a'; x.fillRect(9, 16, 4, 2);
+  },
+  botspd(x) { ICON_DRAW.bot(x); x.fillStyle = '#ffd97a'; x.fillRect(18, 6, 4, 3); x.fillRect(16, 9, 4, 3); x.fillRect(18, 12, 3, 3); },
+  meltspd(x) {
+    x.fillStyle = '#c94f3d'; x.fillRect(9, 4, 5, 16); x.fillRect(7, 9, 9, 11); x.fillRect(6, 13, 12, 7);
+    x.fillStyle = '#f0803c'; x.fillRect(9, 9, 6, 10);
+    x.fillStyle = '#ffd97a'; x.fillRect(10, 13, 4, 6);
+  },
+  meltbatch(x) {
+    x.fillStyle = '#5a6470'; x.fillRect(4, 8, 16, 12); x.fillStyle = '#788492'; x.fillRect(4, 8, 16, 2);
+    x.fillStyle = '#8a5a2b'; x.fillRect(6, 10, 12, 6); x.fillStyle = '#a9743d'; x.fillRect(6, 10, 12, 1);
+    x.fillStyle = '#788492'; x.fillRect(2, 12, 3, 2); x.fillRect(19, 12, 3, 2); // handles
+  },
+  automelt(x) { ICON_DRAW.gearBg(x, '#f0803c'); x.fillStyle = '#c94f3d'; x.fillRect(10, 8, 4, 8); x.fillStyle = '#ffd97a'; x.fillRect(11, 12, 2, 4); },
+  packspd(x) {
+    x.fillStyle = '#c94f8a'; x.fillRect(9, 9, 6, 8); // knot
+    x.fillStyle = '#e87ab0'; x.fillRect(3, 6, 7, 6); x.fillRect(14, 6, 7, 6); // loops
+    x.fillStyle = '#c94f8a'; x.fillRect(5, 8, 3, 2); x.fillRect(16, 8, 3, 2);
+    x.fillStyle = '#fff'; x.fillRect(11, 11, 2, 2);
+  },
+  packbatch(x) {
+    for (let i = 0; i < 2; i++) { const bx = 4 + i * 9; x.fillStyle = '#b5476f'; x.fillRect(bx, 12, 8, 8); x.fillStyle = '#ffd97a'; x.fillRect(bx + 3, 12, 2, 8); x.fillStyle = '#e8c0d2'; x.fillRect(bx, 15, 8, 1); }
+    x.fillStyle = '#6fa8dc'; x.fillRect(8, 4, 8, 8); x.fillStyle = '#ffd97a'; x.fillRect(11, 4, 2, 8);
+  },
+  autopack(x) { ICON_DRAW.gearBg(x, '#c94f8a'); x.fillStyle = '#b5476f'; x.fillRect(8, 8, 8, 8); x.fillStyle = '#ffd97a'; x.fillRect(11, 8, 2, 8); },
+  market(x) {
+    x.fillStyle = '#f0b64a'; x.fillRect(4, 8, 5, 8); x.fillRect(8, 6, 8, 12); // megaphone
+    x.fillStyle = '#ffd97a'; x.fillRect(8, 6, 3, 12);
+    x.fillStyle = '#6fd8f0'; x.fillRect(17, 5, 2, 2); x.fillRect(19, 8, 2, 2); x.fillRect(17, 12, 2, 2); // sound
+  },
+  comfy(x) {
+    x.fillStyle = '#b04a4a'; x.fillRect(4, 6, 4, 12); x.fillRect(16, 6, 4, 12); x.fillRect(4, 12, 16, 6);
+    x.fillStyle = '#c96a5a'; x.fillRect(8, 8, 8, 5); // cushion
+    x.fillStyle = '#8a3838'; x.fillRect(4, 18, 3, 3); x.fillRect(17, 18, 3, 3);
+  },
+  charm(x) {
+    x.fillStyle = '#f0b64a'; x.fillRect(5, 4, 14, 14); x.fillStyle = '#ffd97a'; x.fillRect(6, 5, 12, 3);
+    x.fillStyle = '#3a241a'; x.fillRect(8, 8, 2, 2); x.fillRect(14, 8, 2, 2);
+    x.fillStyle = '#c94f3d'; x.fillRect(8, 13, 8, 2); x.fillRect(9, 14, 6, 1);
+    x.fillStyle = '#e5604f'; x.fillRect(16, 3, 4, 4); // little heart
+  },
+  cashier(x) {
+    x.fillStyle = '#9a734e'; x.fillRect(7, 3, 10, 8); x.fillStyle = '#c2a582'; x.fillRect(9, 7, 6, 4); // bear head+muzzle
+    x.fillStyle = '#20141c'; x.fillRect(9, 6, 2, 2); x.fillRect(13, 6, 2, 2);
+    x.fillStyle = '#f0ead6'; x.fillRect(6, 12, 12, 8); x.fillStyle = '#3f7d6e'; x.fillRect(6, 12, 12, 2);
+    x.fillStyle = '#f0b64a'; x.fillRect(2, 2, 3, 3); // coin
+  },
+  gearBg(x, tint) {
+    x.fillStyle = '#788492';
+    x.fillRect(9, 2, 6, 20); x.fillRect(2, 9, 20, 6);
+    x.fillRect(4, 4, 6, 6); x.fillRect(14, 4, 6, 6); x.fillRect(4, 14, 6, 6); x.fillRect(14, 14, 6, 6);
+    x.fillStyle = '#9aa6b2'; x.fillRect(6, 6, 12, 12);
+    x.fillStyle = tint || '#5a6470'; x.fillRect(8, 8, 8, 8);
+  }
+};
+const iconCache = {};
+function upIconURL(id) {
+  if (iconCache[id]) return iconCache[id];
+  const [cv, x] = mkCanvas(24, 24);
+  (ICON_DRAW[id] || ICON_DRAW.charm)(x);
+  const url = cv.toDataURL();
+  iconCache[id] = url;
+  return url;
+}
+
+/* ---- Zootopia-style animal townsfolk: each customer is a species in clothes ---- */
+const ANIMALS = [
+  { id: 'fox',    fur: '#e2833a', dark: '#c96a24', belly: '#f6ead2', nose: '#2a1a14', ear: 'point',      tail: 'bushy' },
+  { id: 'rabbit', fur: '#cfc7be', dark: '#a9a199', belly: '#f4efe8', nose: '#d38b93', ear: 'long',       tail: 'puff' },
+  { id: 'bear',   fur: '#9a734e', dark: '#7a5636', belly: '#c2a582', nose: '#2a1a14', ear: 'round',      tail: 'none' },
+  { id: 'cat',    fur: '#9298a6', dark: '#727888', belly: '#d9dde6', nose: '#d38b93', ear: 'point',      tail: 'thin', whisk: true },
+  { id: 'panda',  fur: '#eef0f0', dark: '#c9cccc', belly: '#ffffff', nose: '#20242a', ear: 'roundblack', tail: 'none', patch: true },
+  { id: 'pig',    fur: '#e89aa6', dark: '#d07f8c', belly: '#f6d6dc', nose: '#c06a78', ear: 'floppy',     tail: 'curl', pigsnout: true },
+  { id: 'frog',   fur: '#7ec46a', dark: '#5fa84e', belly: '#dcecc4', nose: '#3a6a2a', ear: 'none',       tail: 'none', topeyes: true },
+  { id: 'mouse',  fur: '#b3abb5', dark: '#948c96', belly: '#e3dde5', nose: '#d38b93', ear: 'biground',   tail: 'thin' },
+];
+const SHIRTS = ['#4a78b0', '#b04a4a', '#4aa06a', '#b08a3a', '#7a4ab0', '#b0648c', '#3f9b8e', '#c9722e'];
 
 const custCache = {};
 function custImg(look, frame) {
-  const key = [look.skin, look.hair, look.style, look.shirt, look.granny ? 1 : 0, look.vip ? 1 : 0, frame].join('|');
+  const a = ANIMALS[look.species] || ANIMALS[0];
+  const key = [look.species, look.shirt, look.granny ? 1 : 0, look.vip ? 1 : 0, frame].join('|');
   if (custCache[key]) return custCache[key];
   const [cv, x] = mkCanvas(16, 24);
-  const skin = SKINS[look.skin], hair = look.granny ? '#e8e4da' : HAIRS[look.hair];
-  const shirt = look.vip ? '#20222c' : SHIRTS[look.shirt];   // VIP wears a black tuxedo
-  // head
-  x.fillStyle = skin; x.fillRect(4, 2, 8, 7);
-  // hair
-  x.fillStyle = hair;
-  if (look.vip) {
-    // slick hair, then a top hat over it
-    x.fillRect(4, 2, 8, 2);
-    x.fillStyle = '#15161c'; x.fillRect(3, -2, 10, 4); x.fillRect(2, 1, 12, 2); // hat brim + crown
-    x.fillStyle = '#4a4d5a'; x.fillRect(3, -2, 10, 1);
-  } else if (look.granny) {
-    x.fillRect(3, 1, 10, 3); x.fillRect(6, 0, 4, 2); // bun
-    x.fillRect(3, 3, 2, 3); x.fillRect(11, 3, 2, 3);
-  } else if (look.style === 0) {
-    x.fillRect(4, 1, 8, 2); x.fillRect(3, 2, 2, 2);
-  } else if (look.style === 1) {
-    x.fillRect(4, 1, 8, 2);
-    x.fillRect(4, 0, 2, 1); x.fillRect(7, 0, 2, 1); x.fillRect(10, 0, 2, 1);
+  const shirt = look.vip ? '#20222c' : SHIRTS[look.shirt % SHIRTS.length];
+
+  // ---- tail (behind body, right side) ----
+  if (a.tail === 'bushy') { x.fillStyle = a.dark; x.fillRect(12, 12, 4, 7); x.fillStyle = a.belly; x.fillRect(14, 16, 2, 3); }
+  else if (a.tail === 'puff') { x.fillStyle = a.belly; x.fillRect(13, 15, 3, 3); x.fillStyle = a.dark; x.fillRect(13, 15, 1, 1); }
+  else if (a.tail === 'thin') { x.fillStyle = a.fur; x.fillRect(13, 12, 2, 8); }
+  else if (a.tail === 'curl') { x.fillStyle = a.dark; x.fillRect(13, 14, 2, 1); x.fillRect(14, 13, 1, 2); x.fillRect(13, 12, 1, 1); }
+
+  // ---- ears (behind/around head) ----
+  x.fillStyle = a.fur;
+  if (a.ear === 'point') { x.fillRect(3, 0, 3, 4); x.fillRect(10, 0, 3, 4); x.fillStyle = a.dark; x.fillRect(3, 0, 3, 1); x.fillRect(10, 0, 3, 1); }
+  else if (a.ear === 'long') { x.fillRect(4, 0, 2, 5); x.fillRect(10, 0, 2, 5); x.fillStyle = a.belly; x.fillRect(4, 1, 1, 3); x.fillRect(10, 1, 1, 3); }
+  else if (a.ear === 'round') { x.fillRect(3, 0, 3, 3); x.fillRect(10, 0, 3, 3); x.fillStyle = a.dark; x.fillRect(4, 1, 1, 1); x.fillRect(11, 1, 1, 1); }
+  else if (a.ear === 'roundblack') { x.fillStyle = a.nose; x.fillRect(2, 0, 4, 4); x.fillRect(10, 0, 4, 4); }
+  else if (a.ear === 'floppy') { x.fillRect(2, 3, 3, 4); x.fillRect(11, 3, 3, 4); x.fillStyle = a.dark; x.fillRect(2, 6, 3, 1); x.fillRect(11, 6, 3, 1); }
+  else if (a.ear === 'biground') { x.fillRect(1, 0, 5, 5); x.fillRect(10, 0, 5, 5); x.fillStyle = a.belly; x.fillRect(2, 1, 3, 3); x.fillRect(11, 1, 3, 3); }
+
+  // ---- head + muzzle ----
+  x.fillStyle = a.fur; x.fillRect(4, 2, 8, 8);
+  x.fillStyle = a.dark; x.fillRect(4, 9, 8, 1);            // jaw shade
+  // muzzle / belly patch on the face
+  x.fillStyle = a.belly;
+  if (a.pigsnout) { x.fillRect(6, 6, 4, 4); }
+  else if (a.topeyes) { x.fillRect(5, 7, 6, 2); }          // frog wide mouth area
+  else { x.fillRect(5, 6, 6, 4); }
+  // panda eye patches
+  if (a.patch) { x.fillStyle = a.nose; x.fillRect(4, 4, 3, 3); x.fillRect(9, 4, 3, 3); }
+
+  // ---- eyes ----
+  if (a.topeyes) {                                          // frog: eyes bulge on top of head
+    x.fillStyle = a.fur; x.fillRect(4, 0, 3, 3); x.fillRect(9, 0, 3, 3);
+    x.fillStyle = '#fff'; x.fillRect(5, 1, 2, 2); x.fillRect(10, 1, 2, 2);
+    x.fillStyle = '#20141c'; x.fillRect(6, 1, 1, 1); x.fillRect(11, 1, 1, 1);
+  } else if (a.patch) {
+    x.fillStyle = '#fff'; x.fillRect(5, 5, 1, 1); x.fillRect(10, 5, 1, 1);
+    x.fillStyle = '#20141c'; x.fillRect(5, 5, 1, 1); x.fillRect(10, 5, 1, 1);
   } else {
-    x.fillRect(3, 1, 10, 3); x.fillRect(3, 3, 2, 5); x.fillRect(11, 3, 2, 5);
+    x.fillStyle = '#fff'; x.fillRect(5, 4, 2, 2); x.fillRect(9, 4, 2, 2);
+    x.fillStyle = '#20141c'; x.fillRect(6, 5, 1, 1); x.fillRect(9, 5, 1, 1);
   }
-  // eyes
-  x.fillStyle = '#20141c';
-  x.fillRect(6, 5, 1, 2); x.fillRect(9, 5, 1, 2);
-  if (look.granny) { // glasses
-    x.fillStyle = '#444';
-    x.fillRect(5, 4, 3, 1); x.fillRect(8, 4, 3, 1); x.fillRect(5, 7, 3, 1); x.fillRect(8, 7, 3, 1);
-    x.fillRect(5, 5, 1, 2); x.fillRect(7, 5, 1, 2); x.fillRect(8, 5, 1, 2); x.fillRect(10, 5, 1, 2);
-  }
-  // body
+  // ---- nose ----
+  x.fillStyle = a.nose;
+  if (a.pigsnout) { x.fillRect(6, 7, 4, 3); x.fillStyle = a.dark; x.fillRect(7, 8, 1, 1); x.fillRect(9, 8, 1, 1); }
+  else { x.fillRect(7, 6, 2, 2); }
+  // whiskers (cat)
+  if (a.whisk) { x.fillStyle = a.dark; x.fillRect(1, 7, 3, 1); x.fillRect(12, 7, 3, 1); }
+
+  // ---- body / clothes ----
   x.fillStyle = shirt;
-  if (look.granny) { x.fillRect(4, 9, 8, 5); x.fillRect(3, 14, 10, 5); }
-  else x.fillRect(4, 9, 8, 9);
-  if (look.vip) {
-    // white dress shirt front + red bowtie + gold buttons
-    x.fillStyle = '#f4f0e6'; x.fillRect(7, 9, 2, 9);
-    x.fillStyle = '#c94f3d'; x.fillRect(6, 9, 4, 2);
-    x.fillStyle = '#ffd97a'; x.fillRect(7, 13, 1, 1); x.fillRect(7, 16, 1, 1);
+  if (look.granny) { x.fillRect(4, 10, 8, 4); x.fillRect(3, 14, 10, 5); }
+  else x.fillRect(4, 10, 8, 8);
+  if (look.vip) {                                           // tuxedo front + bowtie + buttons
+    x.fillStyle = '#f4f0e6'; x.fillRect(7, 10, 2, 8);
+    x.fillStyle = '#c94f3d'; x.fillRect(6, 10, 4, 2);
+    x.fillStyle = '#ffd97a'; x.fillRect(7, 14, 1, 1); x.fillRect(7, 16, 1, 1);
+  } else {                                                  // collar hint
+    x.fillStyle = a.belly; x.fillRect(7, 10, 2, 2);
   }
-  // arms
-  x.fillStyle = look.vip ? shirt : skin;
-  x.fillRect(2, 10, 2, 5); x.fillRect(12, 10, 2, 5);
-  // legs (2 frames)
-  x.fillStyle = '#33261e';
+  // arms (fur, sleeves are shirt colored)
+  x.fillStyle = shirt; x.fillRect(2, 11, 2, 4); x.fillRect(12, 11, 2, 4);
+  x.fillStyle = a.fur; x.fillRect(2, 15, 2, 2); x.fillRect(12, 15, 2, 2);
+
+  // ---- accessories ----
+  if (look.vip) {                                           // top hat
+    x.fillStyle = '#15161c'; x.fillRect(3, 0, 10, 2); x.fillRect(4, -3, 8, 4);
+    x.fillStyle = '#4a4d5a'; x.fillRect(4, 0, 8, 1);
+  }
+  if (look.granny) {                                        // glasses + grey shawl trim
+    x.fillStyle = '#4a4a52';
+    x.fillRect(4, 3, 3, 1); x.fillRect(9, 3, 3, 1); x.fillRect(4, 6, 3, 1); x.fillRect(9, 6, 3, 1);
+    x.fillRect(4, 4, 1, 2); x.fillRect(6, 4, 1, 2); x.fillRect(9, 4, 1, 2); x.fillRect(11, 4, 1, 2);
+    x.fillStyle = '#c9b6d6'; x.fillRect(3, 13, 10, 1);
+  }
+
+  // ---- legs / paws (2 walk frames) ----
+  x.fillStyle = a.dark;
   const legTop = look.granny ? 19 : 18;
   if (frame === 0) {
-    x.fillRect(5, legTop, 3, 23 - legTop); x.fillRect(9, legTop, 3, 23 - legTop);
+    x.fillRect(5, legTop, 3, 24 - legTop); x.fillRect(9, legTop, 3, 24 - legTop);
   } else {
-    x.fillRect(4, legTop, 3, 22 - legTop); x.fillRect(10, legTop, 3, 23 - legTop);
-    x.fillRect(4, 22, 3, 1);
+    x.fillRect(4, legTop, 3, 23 - legTop); x.fillRect(10, legTop, 3, 24 - legTop);
   }
-  // shoes
-  x.fillStyle = '#1a1210';
-  if (frame === 0) { x.fillRect(4, 22, 4, 2); x.fillRect(9, 22, 4, 2); }
-  else { x.fillRect(3, 21, 4, 2); x.fillRect(10, 22, 4, 2); }
+  // paw tips
+  x.fillStyle = a.fur === '#eef0f0' ? a.dark : a.belly;
+  if (frame === 0) { x.fillRect(5, 22, 3, 1); x.fillRect(9, 22, 3, 1); }
+  else { x.fillRect(4, 21, 3, 1); x.fillRect(10, 22, 3, 1); }
   custCache[key] = cv;
   return cv;
 }
@@ -861,10 +992,8 @@ function spawnCustomer() {
   // VIP: rare, well-dressed, impatient but tips huge — only once the shop has a name
   const vip = !granny && S.rep > 3.2 && S.stats.served > 8 && Math.random() < 0.09;
   const look = {
-    skin: rndi(0, SKINS.length - 1),
-    hair: rndi(0, HAIRS.length - 1),
-    style: rndi(0, HAIRSTYLES - 1),
-    shirt: vip ? -1 : rndi(0, SHIRTS.length - 1),  // -1 => VIP tuxedo, drawn specially
+    species: rndi(0, ANIMALS.length - 1),
+    shirt: rndi(0, SHIRTS.length - 1),
     granny, vip
   };
   const req = makeRequest(granny);
@@ -944,12 +1073,22 @@ function serveCustomer(c) {
   uiDirty = true;
 }
 
+let cashierCool = 0;
 function updateCustomers(dt) {
   if (customersUnlocked() && !document.hidden) {
     spawnTimer -= dt;
     if (spawnTimer <= 0) {
       spawnTimer = spawnInterval();
       spawnCustomer();
+    }
+  }
+  // Cashier employee: automatically serves the front waiting customer she can fill
+  if (lvl('cashier')) {
+    cashierCool -= dt;
+    if (cashierCool <= 0) {
+      const c = customers.find(c2 => c2.state === 'wait' && stockFor(c2.req) >= c2.req.qty);
+      if (c) { serveCustomer(c); cashierCool = 1.1; }
+      else cashierCool = 0.4;
     }
   }
   for (let i = customers.length - 1; i >= 0; i--) {
@@ -1779,6 +1918,20 @@ function drawRegister() {
   }
 }
 
+/* employee helpers that appear at their stations once hired */
+const WORKER_MOUSE = { species: 7, shirt: 6, granny: false, vip: false };  // Pippa @ melter
+const WORKER_RABBIT = { species: 1, shirt: 2, granny: false, vip: false }; // Benny @ wrapper
+function drawStationWorker(time, look, cx, feet, seed) {
+  const bob = Math.sin(time * 3 + seed) * 1;
+  const frame = Math.floor(time * 4 + seed) % 2;
+  ctx.fillStyle = 'rgba(30,12,2,0.3)'; ctx.fillRect(cx - 9, feet - 1, 18, 3);
+  ctx.drawImage(custImg(look, frame), cx - 10, feet - 30 + bob, 20, 30);
+}
+function drawStationWorkers(time) {
+  if (lvl('automelt')) drawStationWorker(time, WORKER_MOUSE, MELTER.x - 4, 252, 1.3);
+  if (lvl('autopack')) drawStationWorker(time, WORKER_RABBIT, PACKER.x + PACKER.w + 8, 252, 2.7);
+}
+
 /* the shopkeeper standing behind the counter — waves on a sale, bobs idle */
 let keeperBlink = 0;
 function drawShopkeeper(time) {
@@ -1791,7 +1944,7 @@ function drawShopkeeper(time) {
   const torsoBottom = COUNTER.y;                // meet the counter top so he reads as "behind" it
   const th = Math.max(18, torsoBottom - (hy + 12));
   // back arm (resting)
-  ctx.fillStyle = '#e8b88c'; ctx.fillRect(sx - 12, hy + 16, 3, 12);
+  ctx.fillStyle = '#9a734e'; ctx.fillRect(sx - 12, hy + 16, 3, 12);
   // torso / apron
   ctx.fillStyle = '#3f7d6e'; ctx.fillRect(sx - 10, hy + 12, 20, th);   // shirt
   ctx.fillStyle = '#f0ead6'; ctx.fillRect(sx - 7, hy + 16, 14, th - 4);// apron
@@ -1799,20 +1952,23 @@ function drawShopkeeper(time) {
   ctx.fillStyle = '#c98a3d'; ctx.fillRect(sx - 2, hy + 22, 4, 4);      // apron pocket badge
   // collar
   ctx.fillStyle = '#356558'; ctx.fillRect(sx - 6, hy + 10, 12, 3);
-  // head
-  ctx.fillStyle = '#f0c8a0'; ctx.fillRect(sx - 6, hy, 12, 10);
-  ctx.fillStyle = '#e0b088'; ctx.fillRect(sx - 6, hy + 8, 12, 2);      // jaw shade
-  // hair + paper hat
-  ctx.fillStyle = '#5a3a20'; ctx.fillRect(sx - 6, hy, 12, 2); ctx.fillRect(sx - 6, hy + 1, 2, 3); ctx.fillRect(sx + 4, hy + 1, 2, 3);
-  ctx.fillStyle = '#f7f2e6'; ctx.fillRect(sx - 7, hy - 4, 14, 4);      // clerk cap
-  ctx.fillStyle = '#c94f3d'; ctx.fillRect(sx - 7, hy - 1, 14, 1);      // cap stripe
-  // face
-  ctx.fillStyle = '#3a241a';
-  if (keeperBlink) { ctx.fillRect(sx - 4, hy + 5, 3, 1); ctx.fillRect(sx + 1, hy + 5, 3, 1); }
-  else { ctx.fillRect(sx - 3, hy + 4, 2, 2); ctx.fillRect(sx + 1, hy + 4, 2, 2); }
-  ctx.fillStyle = '#c96a5a'; ctx.fillRect(sx - 3, hy + 7, 6, 1);       // smile
-  // waving front arm
-  ctx.fillStyle = '#f0c8a0';
+  // ---- bear head ----
+  ctx.fillStyle = '#9a734e'; ctx.fillRect(sx - 8, hy - 2, 5, 5); ctx.fillRect(sx + 3, hy - 2, 5, 5);   // round ears
+  ctx.fillStyle = '#7a5636'; ctx.fillRect(sx - 7, hy - 1, 2, 2); ctx.fillRect(sx + 4, hy - 1, 2, 2);   // inner ear
+  ctx.fillStyle = '#9a734e'; ctx.fillRect(sx - 6, hy, 12, 10);
+  ctx.fillStyle = '#7a5636'; ctx.fillRect(sx - 6, hy + 8, 12, 2);      // jaw shade
+  ctx.fillStyle = '#c2a582'; ctx.fillRect(sx - 3, hy + 5, 6, 5);       // muzzle
+  ctx.fillStyle = '#2a1a14'; ctx.fillRect(sx - 1, hy + 6, 2, 2);       // nose
+  // clerk cap
+  ctx.fillStyle = '#f7f2e6'; ctx.fillRect(sx - 7, hy - 4, 14, 4);
+  ctx.fillStyle = '#c94f3d'; ctx.fillRect(sx - 7, hy - 1, 14, 1);
+  // eyes
+  ctx.fillStyle = '#20141c';
+  if (keeperBlink) { ctx.fillRect(sx - 4, hy + 4, 3, 1); ctx.fillRect(sx + 1, hy + 4, 3, 1); }
+  else { ctx.fillRect(sx - 3, hy + 3, 2, 2); ctx.fillRect(sx + 1, hy + 3, 2, 2); }
+  ctx.fillStyle = '#8a5638'; ctx.fillRect(sx - 2, hy + 9, 4, 1);       // smile
+  // waving front paw
+  ctx.fillStyle = '#9a734e';
   if (waving) {
     const w = Math.sin(time * 10) * 3;
     ctx.fillRect(sx + 9, hy + 4 + w, 3, 10);
@@ -2061,6 +2217,7 @@ function draw(time) {
   drawWindowSky(time);
   drawMelter(time);
   drawPacker(time);
+  drawStationWorkers(time);
   drawShelfGoods();
   drawShopkeeper(time);
   drawDoor();
@@ -2109,22 +2266,31 @@ function buildAllChips() {
   buildChips('packer-flavors', S.packer);
 }
 
+function upTier(l, max) {
+  if (max <= 1) return l ? { n: 'ON', cls: 't-max' } : { n: '—', cls: 't-0' };
+  if (l >= max) return { n: 'MAX', cls: 't-max' };
+  const frac = l / max;
+  if (l === 0) return { n: 'I', cls: 't-0' };
+  if (frac < 0.34) return { n: 'I', cls: 't-1' };
+  if (frac < 0.67) return { n: 'II', cls: 't-2' };
+  return { n: 'III', cls: 't-3' };
+}
+
 function buildUpgrades() {
   const box = $('tab-upgrades');
   box.innerHTML = '';
   for (const u of UPS) {
     const card = document.createElement('div');
-    card.className = 'up-card';
-    const name = document.createElement('div');
-    name.className = 'up-name';
-    const desc = document.createElement('div');
-    desc.className = 'up-desc';
-    const btn = document.createElement('button');
-    btn.className = 'pxbtn';
+    card.className = 'up-card t-0';
+    card.innerHTML =
+      `<div class="up-ico"><img src="${upIconURL(u.icon || u.id)}" alt=""><span class="up-tier"></span></div>` +
+      `<div class="up-mid"><div class="up-name"></div><div class="up-desc"></div></div>` +
+      `<button class="pxbtn up-buy"></button>`;
+    const btn = card.querySelector('.up-buy');
     btn.onclick = () => buyUpgrade(u);
-    card.appendChild(name); card.appendChild(desc); card.appendChild(btn);
+    card.addEventListener('animationend', () => card.classList.remove('bought'));
     box.appendChild(card);
-    upEls[u.id] = { card, name, desc, btn };
+    upEls[u.id] = { card, name: card.querySelector('.up-name'), desc: card.querySelector('.up-desc'), btn, tier: card.querySelector('.up-tier') };
   }
 }
 
@@ -2136,31 +2302,37 @@ function buyUpgrade(u) {
   S.money -= cost;
   S.ups[u.id] = l + 1;
   sfx.powerup();
+  const els = upEls[u.id];
+  if (els) { els.card.classList.remove('bought'); void els.card.offsetWidth; els.card.classList.add('bought'); }
+  bumpHud('hud-money');
   addFloater(BX + BW / 2, BY - 20, u.name + '!', '#7ed67e');
+  sparkleBurst(BX + BW / 2, BY - 10, 6);
   uiDirty = true;
   updateUI(true);
 }
 
+const barIconURLCache = {};
+function barIconURL(flavId) {
+  if (barIconURLCache[flavId]) return barIconURLCache[flavId];
+  const url = barIcon(flavId).toDataURL();
+  barIconURLCache[flavId] = url;
+  return url;
+}
+
 function buildFlavorTab() {
   const box = $('tab-flavors');
-  box.innerHTML = '';
+  box.innerHTML = '<div class="fl-shelf-label">🍫 FLAVOR SHELF — unlock richer recipes, sell for more</div>';
   for (const f of FLAVORS) {
     const card = document.createElement('div');
     card.className = 'fl-card';
-    const dot = document.createElement('span');
-    dot.className = 'dot';
-    dot.style.background = f.c.base;
-    const nm = document.createElement('div');
-    nm.className = 'fl-name';
-    nm.textContent = f.name;
-    const de = document.createElement('div');
-    de.className = 'fl-desc';
-    de.textContent = f.cost === 0 ? 'Your trusty original.' :
-      `Sells for ${f.mult}x. Bar $${fmt(PRICE.bar * f.mult)} • Box $${fmt(PRICE.box * f.mult)}`;
-    const btn = document.createElement('button');
-    btn.className = 'pxbtn gold';
+    card.innerHTML =
+      `<span class="fl-ico" style="background:${f.c.slab}"><img src="${barIconURL(f.id)}" alt=""></span>` +
+      `<div class="fl-name" style="color:${f.c.light}">${f.name}</div>` +
+      `<div class="fl-desc">${f.cost === 0 ? 'Your trusty original — the base recipe.' :
+        `Sells <b>${f.mult}×</b> · Bar $${fmt(PRICE.bar * f.mult)} · Box $${fmt(PRICE.box * f.mult)}`}</div>` +
+      `<button class="pxbtn gold"></button>`;
+    const btn = card.querySelector('.pxbtn');
     btn.onclick = () => unlockFlavor(f);
-    card.appendChild(dot); card.appendChild(nm); card.appendChild(de); card.appendChild(btn);
     box.appendChild(card);
     flEls[f.id] = { card, btn };
   }
@@ -2207,6 +2379,7 @@ function updateUI(force) {
     mBtn.disabled = S.pieces < MELT_PIECES;
     mBtn.textContent = `MELT ${mBatch * MELT_PIECES} > ${mBatch} BAR${mBatch > 1 ? 'S' : ''}`;
   }
+  mBtn.classList.toggle('ready', !mBtn.disabled);
   $('melter-info').textContent = `${FLAV[m.flavor].name} bar: $${fmt(barPrice(m.flavor))} • takes ${meltDur().toFixed(1)}s`;
   $('melter-auto').classList.toggle('hidden', !lvl('automelt'));
 
@@ -2225,6 +2398,7 @@ function updateUI(force) {
     pBtn.disabled = (S.bars[p.flavor] || 0) < PACK_BARS;
     pBtn.textContent = `WRAP ${pBatch * PACK_BARS} > ${pBatch} BOX${pBatch > 1 ? 'ES' : ''}`;
   }
+  pBtn.classList.toggle('ready', !pBtn.disabled);
   $('packer-info').textContent = `${FLAV[p.flavor].name} box: $${fmt(boxPrice(p.flavor))} • takes ${packDur().toFixed(1)}s`;
   $('packer-auto').classList.toggle('hidden', !lvl('autopack'));
 
@@ -2248,12 +2422,18 @@ function updateUI(force) {
     const l = lvl(u.id);
     els.name.innerHTML = `${u.name} <span class="lv">Lv${l}${u.max > 1 ? '/' + u.max : ''}</span>`;
     els.desc.textContent = u.d(l);
+    const t = upTier(l, u.max);
+    els.tier.textContent = t.n;
+    els.card.classList.remove('t-0', 't-1', 't-2', 't-3', 't-max', 'maxed', 'affordable');
+    els.card.classList.add(t.cls);
     if (l >= u.max) {
       els.card.classList.add('maxed');
     } else {
       const cost = upCost(u);
       els.btn.textContent = '$' + fmt(cost);
-      els.btn.disabled = S.money < cost;
+      const afford = S.money >= cost;
+      els.btn.disabled = !afford;
+      if (afford) els.card.classList.add('affordable');
     }
   }
 
@@ -2432,6 +2612,7 @@ window.GAME = {
   get S() { return S; },
   fmt,
   save,
+  custImg, ANIMALS,
   cutLine: activeCutLine,
   trick,
   customers,
