@@ -1,9 +1,10 @@
 # 🍫 Infinite Choco.co
 
-A moody, pixel-art hustle. You take over a grimy little shop on the wrong side
-of Choco-City with one **endless chocolate bar**. Pull the impossible slicing
+A cozy, warm pixel-art hustle. You take over a little corner shop in
+Choco-City with one **endless chocolate bar**. Pull the impossible slicing
 trick to conjure free pieces, pick up **delivery jobs on your phone**, ride the
-lift up the apartments, and drop orders at the right door.
+lift up the apartments, and drop orders at the right door — all in a soft,
+sunlit, Stardew-ish pixel world.
 
 **Play it:** open `index.html` in any modern browser. No build step, no
 dependencies, works offline.
@@ -39,8 +40,9 @@ menu chrome, just the world and your device.
   drag-into-basket flow, and a cashier to pay
 - **Custom pixel sprites** for customers (randomized skin/hair/outfit), the
   cashier, and every store item
-- **Dark, gritty pixel-art** look: lamp-lit shop, textured surfaces, warm
-  hallway lights, CRT scanlines and vignette
+- **Cozy, detailed pixel-art** look: a sunlit shop with a window, plants, a
+  sleeping cat and a warm pendant lamp; a stocked wooden store rack; a
+  wallpapered apartment corridor with a carpet runner, sconces and framed art
 - Auto-save to localStorage, synthesized sound effects, mute-friendly
 
 ## Tech
