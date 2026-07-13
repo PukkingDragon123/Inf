@@ -1,10 +1,11 @@
 # 🍫 Infinite Choco.co
 
-A cozy, warm pixel-art hustle. You take over a little corner shop in
-Choco-City with one **endless chocolate bar**. Pull the impossible slicing
-trick to conjure free pieces, pick up **delivery jobs on your phone**, ride the
-lift up the apartments, and drop orders at the right door — all in a soft,
-sunlit, Stardew-ish pixel world.
+A warm, hand-illustrated cartoon hustle (think *Dave the Diver* energy — smooth
+shapes, bold outlines, expressive **animal** townsfolk). You take over a little
+corner shop in Choco-City with one **endless chocolate bar**. Pull the
+impossible slicing trick to conjure free pieces, pick up **delivery jobs on
+your phone**, ride the lift up the apartments, and drop orders at the right
+door — where a chatty critter answers.
 
 **Play it:** open `index.html` in any modern browser. No build step, no
 dependencies, works offline.
@@ -38,11 +39,15 @@ menu chrome, just the world and your device.
   target door highlighted and a pixel customer who answers
 - **Convenience store** — shelves of products with custom pixel sprites, a
   drag-into-basket flow, and a cashier to pay
-- **Custom pixel sprites** for customers (randomized skin/hair/outfit), the
-  cashier, and every store item
-- **Cozy, detailed pixel-art** look: a sunlit shop with a window, plants, a
-  sleeping cat and a warm pendant lamp; a stocked wooden store rack; a
-  wallpapered apartment corridor with a carpet runner, sconces and framed art
+- **Illustrated animal characters** — fox, cat, bear, rabbit, pig, frog, deer,
+  panda, each drawn with bold outlines, gradient shading and big expressive
+  eyes; full-body at the door and head-and-shoulders **portraits** in dialogue
+- **Dialogue** — customers greet you when you deliver, the shop cashier chats
+  when you buy; portrait + name + a typed line, tap to continue
+- **Smooth, polished cartoon look** (not pixel): hi-res canvas, a rounded
+  display font, soft gradients and drop shadows; a sunlit shop with a window,
+  plants, a sleeping cat and a pendant lamp; a stocked wooden store rack; a
+  cozy apartment corridor with a carpet runner, sconces and framed art
 - Auto-save to localStorage, synthesized sound effects, mute-friendly
 
 ## Tech
