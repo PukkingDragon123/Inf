@@ -1,55 +1,47 @@
-# 🍫 Infinite Choco Inc.
+# 🍫 Infinite Choco.co
 
-A polished pixel-art **incremental game** about the legendary internet
-"infinite chocolate" trick — cut a 6×4 chocolate bar *just right*, slide the
-pieces back together, and somehow… there's a piece left over. Forever.
+A cute, hands-on chocolatier game. You rent a tiny run-down shop with nothing
+but a **knife**, a **cutting board**, and one **endless block of chocolate**.
+Cut it by hand, melt it in a pot, fill the order notes, and grow from a
+one-person stall into an automated chocolate empire.
 
-**Play it:** just open `index.html` in any modern browser. No build step, no
+**Play it:** open `index.html` in any modern browser. No build step, no
 dependencies, works offline.
 
 ## How to play
 
-1. **Do the trick** — drag the knife along the dotted lines (two cuts), then
-   click the bar to rearrange the pieces. An impossible extra piece pops out.
-   Grab it.
-2. **Process** — melt 4 pieces into a chocolate bar, wrap 2 bars into a gift
-   box. Fancier product = fancier price.
-3. **Sell** — customers walk into your shop and ask for specific things:
-   loose pieces, bars, gift boxes, specific flavors. Click a customer to serve
-   them while their patience lasts. Fast service = big tips.
-4. **Upgrade** — sharper knives, magic hands, choco-bots, marketing, and hire
-   animal **employees** (melter helper, wrapper helper, cashier) to automate
-   the shop; unlock seven chocolate flavors from Milk all the way to Golden.
-5. **Goal** — earn **$1,000,000** and become the Chocolate Mogul.
+1. **Cut** — with the 🔪 knife selected, swipe across the big chocolate block
+   to shave off pieces. They tumble onto the counter with real physics.
+2. **Cook** — switch to the ✋ hand, drag pieces into the pot, then click the
+   **HEAT** knob to turn up the burner. When the chocolate boils and fully
+   melts, hit **POUR** to set it into bars (of the flavor you picked).
+3. **Fill the order** — the pinned note asks for pieces and/or bars. When the
+   checklist is complete, hit **Deliver ✔** for cash.
+4. **Upgrade** — visit the 🏪 **Store** for new flavors, sharper knives, and
+   kitchen gear (bigger pot, hotter burner).
+5. **Automate** — open the 💻 **Computer** and browse `hire.choco.co` to hire
+   staff: **Pippa** the mouse chops, **Cocoa** the bear cooks, **Nadia** the
+   fox delivers — so the shop runs itself.
 
 ## Features
 
-- The actual infinite chocolate illusion, animated: slant cut → second cut →
-  piece swap → the bar re-forms whole *and* drops a bonus square, with a flashy
-  magic burst (ring shockwave + spinning stars) every time
-- **Zootopia-style animal townsfolk**: every customer is a fox, rabbit, bear,
-  cat, panda, pig, frog, or mouse — in clothes, with ears, muzzles and tails.
-  Grandmas (glasses) pay double; rare top-hat **VIPs** pay triple with a golden
-  aura + confetti; a **serve-streak combo** stacks a growing tip bonus
-- A bear **shopkeeper** behind the counter and hireable **employees**: Pippa
-  the mouse runs the melter, Benny the rabbit wraps boxes, Nadia the fox cashier
-  auto-serves — plus choco-bots that do the trick for you
-- **Cookie-Clicker-style upgrade panel**: 15 upgrades each with a custom
-  pixel-art icon, tier badges (I/II/III/MAX) with tier-colored accents and
-  glowing buy buttons; a **flavor shelf** of 7 recipes with price multipliers
-- A stocked convenience-store display shelf (jars, bars, gift boxes, bottles,
-  a SALE tag); production chain pieces → bars → gift boxes
-- Juicy feedback: bouncy purchases, HUD number pops, pulsing "ready" buttons,
-  screen shake, particles, floating numbers
-- All pixel art drawn procedurally in code — zero image assets
-- Synthesized sound effects (WebAudio), mute toggle
-- Auto-save to localStorage + offline progress (your bots keep working up to 4h)
-- Tutorial, screen shake, particles, floating numbers, and other juice
+- **Physics-based cutting**: swipe the knife, watch glossy chocolate pieces
+  bounce, pile, and get dragged/thrown around the counter
+- **Real cooking**: drop pieces in the pot, crank the heat, watch it boil with
+  flames, bubbles and steam, then pour molten chocolate into bars
+- **Order notes** on pinned paper with live checklists and rewards
+- **Convenience store**: 6 flavors (Milk → Gold, escalating value), 4 knives,
+  and kitchen-gear upgrades, each with a rendered icon
+- **Hiring website**: a little in-game browser where you hire animal employees
+  who automate cutting, cooking and delivery
+- **Glossy, rounded, "3D-ish" art**: gradient shading, soft shadows, a
+  metallic pot, a real dial knob, coins, bubbles — all drawn in code
+- Auto-save to localStorage, sound effects (WebAudio), mute toggle
 
 ## Tech
 
-Plain HTML/CSS/JS — `index.html`, `style.css`, `game.js`, plus the
-"Press Start 2P" font ([OFL license](https://fonts.google.com/specimen/Press+Start+2P/license)).
-Canvas is 640×360 logical pixels upscaled with `image-rendering: pixelated`.
+Plain HTML/CSS/JS — `index.html`, `style.css`, `game.js`, plus the rounded
+"Baloo 2" font ([OFL license](https://fonts.google.com/specimen/Baloo+2/license)).
+The kitchen is a 900×560 canvas; the store and computer are HTML/CSS screens.
 
-*The chocolate is infinite. Do not question the chocolate.*
+*The block is infinite. The shop is yours. Get cutting.*
