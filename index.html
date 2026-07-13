@@ -3,104 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Infinite Choco.co — a tiny chocolate shop</title>
-<meta name="description" content="Rent a run-down shop, cut and cook chocolate by hand, fill orders, and build a chocolate empire.">
+<title>Infinite Choco.co</title>
+<meta name="description" content="Run a back-alley chocolate hustle: cut the impossible bar, take orders on your phone, and deliver to apartments across the city.">
 <link rel="stylesheet" href="style.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect x='4' y='6' width='24' height='20' rx='4' fill='%235c3317'/><rect x='7' y='9' width='7' height='6' rx='1.5' fill='%238a5a2b'/><rect x='18' y='9' width='7' height='6' rx='1.5' fill='%238a5a2b'/><rect x='7' y='17' width='7' height='6' rx='1.5' fill='%238a5a2b'/><rect x='18' y='17' width='7' height='6' rx='1.5' fill='%238a5a2b'/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23120d16'/><rect x='5' y='7' width='22' height='18' fill='%233a2415'/><rect x='8' y='10' width='6' height='5' fill='%236a4222'/><rect x='18' y='10' width='6' height='5' fill='%236a4222'/><rect x='8' y='17' width='6' height='5' fill='%236a4222'/><rect x='18' y='17' width='6' height='5' fill='%236a4222'/></svg>">
 </head>
 <body>
-<div id="app">
+<div id="game">
 
-  <header id="topbar">
-    <div id="brand"><span id="brand-logo">🍫</span><span id="brand-name">Infinite&nbsp;Choco<span class="dot">.co</span></span></div>
-    <div id="wallet">
-      <div class="stat" id="stat-money" title="Cash"><span class="coin">$</span><span id="money">0</span></div>
-      <div class="stat" id="stat-orders" title="Orders completed"><span class="oico">📋</span><span id="orders-done">0</span></div>
-      <div class="stat" id="stat-rep" title="Shop stars"><span id="rep">★☆☆☆☆</span></div>
-    </div>
-    <div id="soundwrap"><button class="round-btn" id="btn-sound" title="Sound">🔊</button></div>
-  </header>
-
-  <nav id="tabs">
-    <button class="tab active" data-scene="kitchen"><span class="tico">🔪</span> Kitchen</button>
-    <button class="tab" data-scene="store"><span class="tico">🏪</span> Store</button>
-    <button class="tab" data-scene="computer"><span class="tico">💻</span> Computer</button>
-  </nav>
-
-  <main id="stage">
-    <!-- KITCHEN -->
-    <section class="scene active" id="scene-kitchen">
-      <div id="kitchen-wrap">
-        <canvas id="kitchen" width="900" height="560"></canvas>
-        <div id="k-toasts"></div>
-
-        <!-- floating order note -->
-        <div id="order-note">
-          <div class="pin"></div>
-          <div class="note-title">TODAY'S ORDER</div>
-          <div class="note-body" id="order-body"></div>
-          <button class="btn deliver" id="btn-deliver">Deliver ✔</button>
-        </div>
-
-        <!-- tool dock -->
-        <div id="tooldock">
-          <button class="tool active" id="tool-knife" title="Knife — swipe to cut">🔪</button>
-          <button class="tool" id="tool-hand" title="Hand — drag chocolate">✋</button>
-          <div class="tool-sep"></div>
-          <div id="pot-flavor" title="Pot flavor"></div>
-        </div>
-
-        <!-- tray readout -->
-        <div id="tray">
-          <div class="tray-row"><span class="tray-ico piece"></span><span id="tray-pieces">0</span> pcs</div>
-          <div id="tray-bars"></div>
-        </div>
-      </div>
-      <p class="hint" id="k-hint">Swipe the knife across the big chocolate block to shave off pieces.</p>
-    </section>
-
-    <!-- STORE -->
-    <section class="scene" id="scene-store">
-      <div class="screen-head">
-        <h2>🏪 Sweet Supplies — Convenience Store</h2>
-        <p>Stock up on flavors, sharper knives, and better gear.</p>
-      </div>
-      <div class="shop-tabs" id="shop-tabs">
-        <button class="shop-tab active" data-cat="flavors">Flavors</button>
-        <button class="shop-tab" data-cat="knives">Knives</button>
-        <button class="shop-tab" data-cat="gear">Kitchen Gear</button>
-      </div>
-      <div id="shop-grid"></div>
-    </section>
-
-    <!-- COMPUTER -->
-    <section class="scene" id="scene-computer">
-      <div id="browser">
-        <div class="browser-bar">
-          <span class="dots"><i></i><i></i><i></i></span>
-          <span class="url" id="browser-url">https://hire.choco.co</span>
-          <span class="browser-menu">⋮</span>
-        </div>
-        <div class="browser-body" id="browser-body"></div>
-      </div>
-    </section>
-  </main>
-
-  <footer id="foot">
-    <span id="save-note"></span>
-    <button class="link-btn danger" id="btn-reset">reset save</button>
-  </footer>
-</div>
-
-<div id="overlay">
-  <div id="overlay-card">
-    <div id="overlay-emoji">🍫</div>
-    <div id="overlay-title"></div>
-    <div id="overlay-text"></div>
-    <button class="btn big" id="overlay-btn">Start</button>
+  <div id="world-wrap">
+    <canvas id="world" width="640" height="360"></canvas>
+    <div id="scanlines"></div>
+    <div id="cash-chip"><span class="c">§</span><span id="cash">0</span></div>
+    <div id="scene-label"><span id="scene-name"></span></div>
+    <div id="w-toasts"></div>
+    <button id="phone-btn" title="Phone"><span></span></button>
   </div>
-</div>
 
+  <!-- diegetic phone -->
+  <div id="phone" class="closed">
+    <div id="phone-frame">
+      <div id="phone-cam"></div>
+      <div id="phone-status">
+        <span id="ph-time">9:41</span>
+        <span id="ph-right"><span id="ph-net">CHOCO-NET</span> <span id="ph-cash">§0</span> <span id="ph-batt">78</span></span>
+      </div>
+      <div id="phone-screen"></div>
+      <div id="phone-nav">
+        <button id="ph-back" title="Back">‹</button>
+        <button id="ph-home" title="Home"></button>
+        <button id="ph-close" title="Pocket phone">×</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="overlay" class="show">
+    <div id="overlay-card">
+      <div id="overlay-title"></div>
+      <div id="overlay-text"></div>
+      <button class="pbtn big" id="overlay-btn">ENTER</button>
+    </div>
+  </div>
+
+</div>
 <script src="game.js"></script>
 </body>
 </html>

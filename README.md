@@ -1,47 +1,52 @@
 # 🍫 Infinite Choco.co
 
-A cute, hands-on chocolatier game. You rent a tiny run-down shop with nothing
-but a **knife**, a **cutting board**, and one **endless block of chocolate**.
-Cut it by hand, melt it in a pot, fill the order notes, and grow from a
-one-person stall into an automated chocolate empire.
+A moody, pixel-art hustle. You take over a grimy little shop on the wrong side
+of Choco-City with one **endless chocolate bar**. Pull the impossible slicing
+trick to conjure free pieces, pick up **delivery jobs on your phone**, ride the
+lift up the apartments, and drop orders at the right door.
 
 **Play it:** open `index.html` in any modern browser. No build step, no
 dependencies, works offline.
 
 ## How to play
 
-1. **Cut** — with the 🔪 knife selected, swipe across the big chocolate block
-   to shave off pieces. They tumble onto the counter with real physics.
-2. **Cook** — switch to the ✋ hand, drag pieces into the pot, then click the
-   **HEAT** knob to turn up the burner. When the chocolate boils and fully
-   melts, hit **POUR** to set it into bars (of the flavor you picked).
-3. **Fill the order** — the pinned note asks for pieces and/or bars. When the
-   checklist is complete, hit **Deliver ✔** for cash.
-4. **Upgrade** — visit the 🏪 **Store** for new flavors, sharper knives, and
-   kitchen gear (bigger pot, hotter burner).
-5. **Automate** — open the 💻 **Computer** and browse `hire.choco.co` to hire
-   staff: **Pippa** the mouse chops, **Cocoa** the bear cooks, **Nadia** the
-   fox delivers — so the shop runs itself.
+Everything is run from your **phone** (tap the phone, bottom-right) — there's no
+menu chrome, just the world and your device.
+
+1. **Jobs** app → accept a delivery (e.g. *2× Milk → Maple Court 5A*).
+2. **Map** app → travel to **Your Shop**.
+3. **Cut the bar** — the real infinite-chocolate hack: drag the knife along the
+   dotted **slant**, then the **vertical** cut, then drag the two top pieces
+   into their ghost outlines. The bar reforms whole *and* an extra square pops
+   out — collect it. Repeat forever. Tap a flavor chip to choose what you cut.
+4. **Map** → travel to **Maple Court Apartments**, pick the floor in the lift,
+   then tap the highlighted **door** to deliver and get paid.
+5. **Store** → travel to the 24H convenience store, **drag products into your
+   basket**, and tap the basket to pay the **cashier** — buy new flavors,
+   sharper knives, and perks (insulated bag, delivery cart).
 
 ## Features
 
-- **Physics-based cutting**: swipe the knife, watch glossy chocolate pieces
-  bounce, pile, and get dragged/thrown around the counter
-- **Real cooking**: drop pieces in the pot, crank the heat, watch it boil with
-  flames, bubbles and steam, then pour molten chocolate into bars
-- **Order notes** on pinned paper with live checklists and rewards
-- **Convenience store**: 6 flavors (Milk → Gold, escalating value), 4 knives,
-  and kitchen-gear upgrades, each with a rendered icon
-- **Hiring website**: a little in-game browser where you hire animal employees
-  who automate cutting, cooking and delivery
-- **Glossy, rounded, "3D-ish" art**: gradient shading, soft shadows, a
-  metallic pot, a real dial knob, coins, bubbles — all drawn in code
-- Auto-save to localStorage, sound effects (WebAudio), mute toggle
+- **Diegetic phone UI** — a pixel-art phone OS (clock, app grid, status bar)
+  with Map, Jobs, Store and Wallet apps; no traditional menus
+- **The accurate infinite-chocolate trick** — two real drag-to-slice cuts plus
+  a drag-to-rearrange step that yields the impossible extra piece
+- **City map** with three locations you travel between: your shop, the store,
+  and an apartment building
+- **Apartment deliveries** — a lift, six floors, four doors each, with the
+  target door highlighted and a pixel customer who answers
+- **Convenience store** — shelves of products with custom pixel sprites, a
+  drag-into-basket flow, and a cashier to pay
+- **Custom pixel sprites** for customers (randomized skin/hair/outfit), the
+  cashier, and every store item
+- **Dark, gritty pixel-art** look: lamp-lit shop, textured surfaces, warm
+  hallway lights, CRT scanlines and vignette
+- Auto-save to localStorage, synthesized sound effects, mute-friendly
 
 ## Tech
 
-Plain HTML/CSS/JS — `index.html`, `style.css`, `game.js`, plus the rounded
-"Baloo 2" font ([OFL license](https://fonts.google.com/specimen/Baloo+2/license)).
-The kitchen is a 900×560 canvas; the store and computer are HTML/CSS screens.
+Plain HTML/CSS/JS — `index.html`, `style.css`, `game.js`, plus the "Press
+Start 2P" pixel font. The world is a 640×360 canvas rendered pixel-perfect; the
+phone is a styled DOM overlay.
 
-*The block is infinite. The shop is yours. Get cutting.*
+*The bar is infinite. The city is hungry. Get slicing.*
