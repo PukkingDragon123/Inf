@@ -15,17 +15,22 @@ dependencies, works offline.
 Everything is run from your **phone** (tap the phone, bottom-right) — there's no
 menu chrome, just the world and your device.
 
-1. **Jobs** app → accept a delivery (e.g. *2× Milk → Maple Court 5A*).
+1. **Jobs** app → accept a delivery (e.g. *2× Dark bar + Sprinkles → Maple Court 5A*).
 2. **Map** app → travel to **Your Shop**.
 3. **Cut the bar** — the real infinite-chocolate hack: drag the knife along the
    dotted **slant**, then the **vertical** cut, then drag the two top pieces
    into their ghost outlines. The bar reforms whole *and* an extra square pops
-   out — collect it. Repeat forever. Tap a flavor chip to choose what you cut.
-4. **Map** → travel to **Maple Court Apartments**, pick the floor in the lift,
+   out. Repeat for as many **pieces** as you need.
+4. **Cook** — tap **COOK** to flip to the kitchen: **drag pieces** (with real
+   physics — they bounce and pile) into the **melting pot**, tap the pot to
+   **pour** a bar into the **mold**, then **drag a topping** jar onto it to
+   match the order. Tap the bar to finish it.
+5. **Map** → travel to **Maple Court Apartments**, pick the floor in the lift,
    then tap the highlighted **door** to deliver and get paid.
-5. **Store** → travel to the 24H convenience store, **drag products into your
-   basket**, and tap the basket to pay the **cashier** — buy new flavors,
-   sharper knives, and perks (insulated bag, delivery cart).
+6. **Store** → the 24H shop: **drag products into your basket** and tap it to
+   pay the **cashier** — buy flavors, sharper knives, and perks.
+7. **Recipes** app → a little recipe book with the full craft chain, topping
+   list, and your current order's target.
 
 ## Features
 
@@ -33,6 +38,10 @@ menu chrome, just the world and your device.
   with Map, Jobs, Store and Wallet apps; no traditional menus
 - **The accurate infinite-chocolate trick** — two real drag-to-slice cuts plus
   a drag-to-rearrange step that yields the impossible extra piece
+- **Physics crafting** — cut pieces become bouncy draggable tokens you drop
+  into a melting pot, pour into a mold, and sprinkle with toppings
+  (sprinkles / hazelnuts / sea salt) to make finished bar combos to order
+- **Recipe book** app + contextual **interactive tutorial** hints
 - **City map** with three locations you travel between: your shop, the store,
   and an apartment building
 - **Apartment deliveries** — a lift, six floors, four doors each, with the
