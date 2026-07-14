@@ -1,68 +1,85 @@
-# 🍫 Infinite Choco.co
+# 🍫 Infinite Choco — Street Hustle
 
-A warm, hand-illustrated cartoon hustle (think *Dave the Diver* energy — smooth
-shapes, bold outlines, expressive **animal** townsfolk). You take over a little
-corner shop in Choco-City with one **endless chocolate bar**. Pull the
-impossible slicing trick to conjure free pieces, pick up **delivery jobs on
-your phone**, ride the lift up the apartments, and drop orders at the right
-door — where a chatty critter answers.
+Chocolate is **illegal**. You run a back-alley **lab** with the one thing the
+law can't explain — an **endless chocolate bar**. Pull the impossible slicing
+trick to conjure free product, cook it down, take **drops** on your burner
+phone, slip up the Towers to hand off at the right door — and stay one step
+ahead of the **cops** as your **heat** climbs. A grimy, pixel-filtered,
+Schedule-I-flavored spin on the viral infinite-chocolate trick.
 
 **Play it:** open `index.html` in any modern browser. No build step, no
 dependencies, works offline.
 
 ## How to play
 
-Everything is run from your **phone** (tap the phone, bottom-right) — there's no
-menu chrome, just the world and your device.
+Everything runs from your **burner phone** (tap it, bottom-right) — no menu
+chrome, just the block and your device.
 
-1. **Jobs** app → accept a delivery (e.g. *2× Dark bar + Sprinkles → Maple Court 5A*).
-2. **Map** app → travel to **Your Shop**.
-3. **Cut the bar** — the real infinite-chocolate hack: drag the knife along the
-   dotted **slant**, then the **vertical** cut, then drag the two top pieces
-   into their ghost outlines. The bar reforms whole *and* an extra square pops
+1. **Drops** app → take a run (e.g. *2× Dark bar + Sprinkles → Maple Court 5A*).
+2. **Map** app → head to **The Lab**.
+3. **Cut the bar** — the real infinite-chocolate hack: drag the blade along the
+   dotted **slant**, then the **vertical** cut, then slide the two top pieces
+   into their ghost outlines. The bar reforms whole *and* an extra square drops
    out. Repeat for as many **pieces** as you need.
-4. **Cook** — tap **COOK** to flip to the kitchen: **drag pieces** (with real
-   physics — they bounce and pile) into the **melting pot**, tap the pot to
-   **pour** a bar into the **mold**, then **drag a topping** jar onto it to
-   match the order. Tap the bar to finish it.
-5. **Map** → travel to **Maple Court Apartments**, pick the floor in the lift,
-   then tap the highlighted **door** to deliver and get paid.
-6. **Store** → the 24H shop: **drag products into your basket** and tap it to
-   pay the **cashier** — buy flavors, sharper knives, and perks.
-7. **Recipes** app → a little recipe book with the full craft chain, topping
-   list, and your current order's target.
+4. **Cook** — tap **COOK** to flip to the kitchen: **drag pieces** (real
+   physics — they bounce and pile) into the **melting pot**, tap it to **pour**
+   a bar into the mold, then **drag a topping** jar on to match the order. Tap
+   the bar to finish it.
+5. **Map** → slip into **Maple Court Towers**, pick a floor in the lift, then
+   knock the highlighted **door** to hand off and get paid.
+6. **Plug** → the corner store: **drag product into your basket** and pay the
+   clerk — new flavors, sharper blades, and perks.
+7. **Heat** app → watch your **wanted level**, and **lay low** at a safehouse
+   to cool off when things get loud.
+
+## Staying free (the heat system)
+
+- Every **drop** turns up your **HEAT** (shown top-right, with a 0–5 star
+  wanted level).
+- Run too hot (~35+) and the **law** may be waiting behind the door. When you
+  get **BUSTED**, pick your way out:
+  - **Grease him** — pay the cop off; the drop still goes through.
+  - **Stash & run** — bail on the drop, but cool the heat right down.
+  - **Talk it out** — risky; talk your way clear, or eat a fine and lose the
+    drop.
+- Heat cools slowly on its own, or instantly (for a price) via **Lay low** on
+  the Heat app.
 
 ## Features
 
-- **Diegetic phone UI** — a pixel-art phone OS (clock, app grid, status bar)
-  with Map, Jobs, Store and Wallet apps; no traditional menus
+- **Diegetic burner-phone UI** — a dark phone OS (clock, app grid, status bar)
+  with Map, Drops, Plug, Recipes, Heat and Wallet apps; no traditional menus
 - **The accurate infinite-chocolate trick** — two real drag-to-slice cuts plus
   a drag-to-rearrange step that yields the impossible extra piece
 - **Physics crafting** — cut pieces become bouncy draggable tokens you drop
-  into a melting pot, pour into a mold, and sprinkle with toppings
-  (sprinkles / hazelnuts / sea salt) to make finished bar combos to order
-- **Recipe book** app + contextual **interactive tutorial** hints
-- **City map** with three locations you travel between: your shop, the store,
-  and an apartment building
-- **Apartment deliveries** — a lift, six floors, four doors each, with the
-  target door highlighted and a pixel customer who answers
-- **Convenience store** — shelves of products with custom pixel sprites, a
-  drag-into-basket flow, and a cashier to pay
+  into a **rounded, polished melting pot**, pour into a mold, and cut with
+  toppings (sprinkles / hazelnuts / sea salt) to fill bar combos to order
+- **Police & wanted system** — a HEAT meter, a stern K-9 officer, and a
+  bribe / run / talk **bust choice** event with sirens and red-and-blue flash
+- **Pixel-art post filter** — the smooth illustrated art is rendered, then
+  downsampled and nearest-neighbour upscaled for a chunky retro look, under a
+  cool, dark street color grade
+- **City map** with three spots you travel between: your lab, the corner store,
+  and the Towers
+- **Apartment drops** — a lift, six floors, four doors each, target door
+  highlighted, with a pixel client (or a cop) who answers
+- **Corner store** — shelves of product with custom pixel sprites, a
+  drag-into-basket flow, and a clerk to pay
 - **Illustrated animal characters** — fox, cat, bear, rabbit, pig, frog, deer,
-  panda, each drawn with bold outlines, gradient shading and big expressive
-  eyes; full-body at the door and head-and-shoulders **portraits** in dialogue
-- **Dialogue** — customers greet you when you deliver, the shop cashier chats
-  when you buy; portrait + name + a typed line, tap to continue
-- **Smooth, polished cartoon look** (not pixel): hi-res canvas, a rounded
-  display font, soft gradients and drop shadows; a sunlit shop with a window,
-  plants, a sleeping cat and a pendant lamp; a stocked wooden store rack; a
-  cozy apartment corridor with a carpet runner, sconces and framed art
-- Auto-save to localStorage, synthesized sound effects, mute-friendly
+  panda, each with bold outlines, gradient shading and big expressive eyes;
+  full-body at the door and head-and-shoulders **portraits** in dialogue
+- **Dialogue** — clients greet you when you drop, the plug chats when you buy;
+  portrait + name + a typed line, tap to continue
+- **Juicy, bouncy feedback** — coin bursts on payout, screen shake, squishy
+  physics tokens, a bouncy POUR button, cash-chip pops, and the bust flash
+- Auto-save to localStorage, synthesized sound effects (incl. a siren),
+  mute-friendly
 
 ## Tech
 
-Plain HTML/CSS/JS — `index.html`, `style.css`, `game.js`, plus the "Press
-Start 2P" pixel font. The world is a 640×360 canvas rendered pixel-perfect; the
-phone is a styled DOM overlay.
+Plain HTML/CSS/JS — `index.html`, `style.css`, `game.js`, plus the rounded
+"Baloo 2" display font. The world is a 640×360 canvas rendered at 2×, then run
+through an in-canvas pixel-art downscale/upscale filter; the phone is a styled
+DOM overlay drawn crisp on top.
 
-*The bar is infinite. The city is hungry. Get slicing.*
+*The bar is infinite. The block is hungry. The cops are watching. Get slicing.*

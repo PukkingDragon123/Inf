@@ -127,3 +127,35 @@ body{
 #overlay-text .dim{color:var(--dim);}
 
 @media(max-width:560px){#cash-chip{font-size:12px;}#phone-frame{height:524px;}}
+
+/* ============================================================
+   STREET DARK UI  — burner-phone / back-alley reskin
+   ============================================================ */
+#phone{background:rgba(6,3,12,.62);}
+#phone-frame{background:linear-gradient(#2a2130,#141019);box-shadow:0 0 0 4px #43364f,0 20px 50px rgba(4,1,10,.78);}
+#phone-status{color:#c8b6da;}
+#ph-net{color:#9a7ad0;} #ph-cash{color:#ffe0a2;}
+#phone-screen{background:linear-gradient(180deg,#191322,#0c0812);color:#e7d9c6;border-color:#080510;}
+#phone-screen::-webkit-scrollbar-thumb{background:#3a2c42;}
+.scr-title{color:#f6b23e;text-shadow:0 1px 0 rgba(0,0,0,.5);}
+.card{background:#221a29;border-color:#080510;box-shadow:0 4px 0 rgba(0,0,0,.42);}
+.card.hot{border-color:#e04a4a;box-shadow:0 4px 0 rgba(60,10,10,.5);}
+.stars{font-size:22px;color:#ff8a4a;letter-spacing:4px;margin:5px 0 7px;text-shadow:0 0 9px rgba(255,90,40,.45);}
+.row-title{color:#f2e6d4;} .row-sub{color:#aa9b8d;} .row-sub b{color:#e9d8c4;}
+.pbtn.ghost{background:#2c2436;color:#e7d9c6;}
+.home-clock{color:#ffd79a;text-shadow:0 0 12px rgba(255,180,90,.3);} .home-date{color:#9a8ba2;}
+.app-name{color:#d8c8b4;} .app-ico{box-shadow:0 4px 0 rgba(0,0,0,.5);}
+.wallet-big{color:#ffcf6b;} .wallet-lbl{color:#9a8ba2;}
+.stat-line{color:#aa9b8d;border-bottom-color:#2c2434;} .stat-line b{color:#f2e6d4;}
+.empty{color:#7a6b7c;}
+.map-loc .mi,.app-ico{border-color:#080510;}
+#overlay{background:rgba(5,2,10,.82);}
+#overlay-card{background:linear-gradient(#241b2c,#120c18);box-shadow:0 0 0 4px #43364f,0 22px 50px rgba(0,0,0,.72);}
+#overlay-title{color:#f6b23e;} #overlay-text{color:#d8c8b4;} #overlay-text .dim{color:#a695a8;}
+.w-toast{background:#1d1524;color:#f0dcc2;border-color:#080510;box-shadow:0 5px 0 rgba(0,0,0,.4);}
+.w-toast.gold{background:linear-gradient(#ffdf9a,#f6b23e);color:#5a2f00;}
+#cash-chip{background:#1d1524;color:#ffcf6b;border-color:#080510;box-shadow:0 4px 0 rgba(0,0,0,.4),inset 0 2px 0 rgba(255,255,255,.08);}
+#cash-chip .c{background:var(--amber);color:#241016;}
+#world-wrap{box-shadow:0 0 0 4px #43364f,0 18px 44px rgba(2,0,8,.6);}
+#phone-btn{background:linear-gradient(#3a2d44,#1d1526);box-shadow:0 6px 0 rgba(4,1,10,.5);}
+#phone-btn span{background:linear-gradient(160deg,#ffe3a0,#f0a63c);}
